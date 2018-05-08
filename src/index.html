@@ -1,31 +1,73 @@
 <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="UTF-8">
-      <title>Hello World!</title>
-      <link rel="stylesheet" href="../assets/css/main.css">
-    </head>
-    <body>
-      
-      <div class="row">
-        <div id="price-container">
-          <p class="subtext">Current price</p>
-          <h1 id="price">loading...</h1>
-        </div>
+<html ng-app="otwlApp">
 
-        <div id="goal-container">
-          <p><img src="../assets/images/up.svg"> <span id="targetPrice">Choose a Target Price</span> </p>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <title>OTWL DESKTOP APP</title>
 
-        <div id="right-container">
-          <button id="notifyBtn">Notify me when ..</button>
-        </div>
+  <script src="../assets/angular-1.5.0/angular.min.js"></script>
+  <script src="../assets/angular-1.5.0/angular-animate.min.js"></script>
+  <script src="../assets/angular-1.5.0/angular-aria.min.js"></script>
+  <script src="../assets/angular-1.5.0/angular-messages.min.js"></script>
 
+  <link href="../assets/angular-1.5.0/bower1.1.5-angular-material.css" rel="stylesheet" />
+  <link href="../assets/angular-1.5.0/material-1.1.5-docs.css" rel="stylesheet" />
+  <script src="../assets/angular-1.5.0/material114-svg-assets-cache.js"></script>
+  <script src="../assets/angular-1.5.0/angular-material-1.1.4.min.js"></script>
+
+  <link href="../assets/ui-grid-info-4.0.7/ui-grid.min.css" rel="stylesheet" />
+  <script src="../assets/ui-grid-info-4.0.7/ui-grid.min.js"></script>
+
+  <script src="../assets/ui-bootstrap-ng/ui-bootstrap-tpls-2.5.0.min.js"></script>
+  <link href="../assets/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /> -->
+
+  <link href="common/css/index.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <div ng-controller="MasterController" layout="column" ng-cloak="">
+    <section layout="row" flex="">
+      <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" id="leftSideNav" md-disable-backdrop="true">
+        <div ng-include src="'common/html/sidenav.html'"></div>
+      </md-sidenav>
+    </section>
+
+    <section layout="row" layout-sm="row" layout-align="end center">
+      <md-button class="md-fab md-mini md-primary" ng-click="masterc.toggleSideNav()">
+        <md-icon md-svg-src="../assets/icons/win/list_white.svg"></md-icon>
+      </md-button>
+      <md-button class="md-fab md-mini md-primary" ng-click="masterc.minimizeWindow()">🗕</md-button>
+      <md-button class="md-fab md-mini md-primary" ng-click="masterc.closeWindow()">✖</md-button>
+    </section>
+
+    <section layout="row" layout-sm="row" layout-align="space-between stretch" style="background:#006699;">
+      <div><br></div>
+    </section>
+
+    <div ng-switch="masterc.toShow">
+      <div ng-switch-when="login">
+        <ng-include src="'src/html/reminder.html'" ng-controller="reminder"></ng-include>
       </div>
-<script>
-  require('../renderer.js')
-</script>
-      <script src="index.js"></script>
-      
-    </body>
-  </html>
+      <div ng-switch-when="test">
+        <ng-include src="'src/html/test.html'" ng-controller="test"></ng-include>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script>
+    require('../renderer.js')
+  </script>
+  <script src="ang_mn.js"></script>
+  <script src="ang_sv.js"></script>
+  <script src="ang_master.js"></script>
+
+
+
+</body>
+
+</html>
