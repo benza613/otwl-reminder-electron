@@ -35,24 +35,29 @@
       </md-sidenav>
     </section>
 
-    <section layout="row" layout-sm="row" layout-align="end center">
-      <md-button class="md-fab md-mini md-primary" ng-click="masterc.toggleSideNav()">
-        <md-icon md-svg-src="../assets/icons/win/list_white.svg"></md-icon>
-      </md-button>
-      <md-button class="md-fab md-mini md-primary" ng-click="masterc.minimizeWindow()">🗕</md-button>
-      <md-button class="md-fab md-mini md-primary" ng-click="masterc.closeWindow()">✖</md-button>
+    <section layout="row" layout-sm="row" layout-align="space-between center">
+      <div>
+        <img src="../assets/images/ocean_logo.png" alt="Girl in a jacket" width="110" height="40">
+      </div>
+      <div>
+        <md-button class="md-fab md-mini md-primary" ng-click="masterc.toggleSideNav()">
+          <md-icon md-svg-src="../assets/icons/win/list_white.svg"></md-icon>
+        </md-button>
+        <md-button class="md-fab md-mini md-primary" ng-click="masterc.minimizeWindow()">🗕</md-button>
+        <md-button class="md-fab md-mini md-primary" ng-click="masterc.closeWindow()">✖</md-button>
+      </div>
     </section>
 
-    <section layout="row" layout-sm="row" layout-align="space-between stretch" style="background:#006699;">
-      <div><br></div>
-    </section>
-
+ 
     <div ng-switch="masterc.toShow">
       <div ng-switch-when="login">
-        <ng-include src="'src/html/reminder.html'" ng-controller="reminder"></ng-include>
+        <ng-include src="'common/html/login.html'" ng-controller="login"></ng-include>
+      </div>
+      <div ng-switch-when="reminder">
+        <ng-include src="'common/html/reminder.html'" ng-controller="reminder"></ng-include>
       </div>
       <div ng-switch-when="test">
-        <ng-include src="'src/html/test.html'" ng-controller="test"></ng-include>
+        <ng-include src="'common/html/test.html'" ng-controller="test"></ng-include>
       </div>
     </div>
 
@@ -65,6 +70,7 @@
   <script src="ang_mn.js"></script>
   <script src="ang_sv.js"></script>
   <script src="ang_master.js"></script>
+  <script src="common/js/login.js"></script>
 
 
 

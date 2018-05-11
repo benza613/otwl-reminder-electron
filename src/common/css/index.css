@@ -2,3 +2,9 @@
     min-width: 2%;
     min-height: 1% !important;
 }
+
+.Aligner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

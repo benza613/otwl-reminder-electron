@@ -1,11 +1,12 @@
-const { ipcRenderer,remote } = require ('electron')
+const { ipcRenderer, remote } = require('electron')
 
 app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $mdSidenav) {
 
     $rootScope.pending = 'Feature Pending. Currently Under Development.';
 
-    $scope.masterc={};
-
+    $scope.masterc = {};
+    $scope.masterc.toShow = 'login';
+    
     $scope.masterc.toggleSideNav = function () {
         $mdSidenav("left").toggle();
     };
