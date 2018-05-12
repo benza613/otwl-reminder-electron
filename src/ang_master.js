@@ -1,4 +1,5 @@
 const { ipcRenderer, remote } = require('electron')
+const axios = require('axios');
 
 app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $mdSidenav) {
 
