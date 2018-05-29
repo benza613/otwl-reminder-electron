@@ -132,3 +132,4 @@ app.on('activate', () => {
 ipcMain.on('close-window-main', function (e) {
   app.quit();
 });
+
