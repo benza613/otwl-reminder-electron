@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
 const url = require('url')
 const shell = require('electron').shell
-
+const settings = require('electron-settings');
 //process call handler
 const { ipcMain } = require('electron');
 
@@ -15,6 +15,11 @@ let win
 const { setup: setupPushReceiver } = require('electron-push-receiver');
 
 function createWindow() {
+
+  settings.set('name', {
+    first: 'Cosmo',
+    last: 'Kramer'
+  });
   // Create the browser window.
   win = new BrowserWindow({ width: 800, frame: false, height: 600 })
 

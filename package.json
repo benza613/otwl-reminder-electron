@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "electron-push-receiver": "^2.0.0"
+    "electron-push-receiver": "^2.0.0",
+    "electron-settings": "^3.2.0"
   }
 }

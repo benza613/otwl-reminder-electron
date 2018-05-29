@@ -1,8 +1,8 @@
 const { ipcRenderer, remote } = require('electron')
 const axios = require('axios');
+const settings = require('electron-settings');
 
 app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $mdSidenav) {
-
     $rootScope.pending = 'Feature Pending. Currently Under Development.';
 
     $scope.masterc = {};
