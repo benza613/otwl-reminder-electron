@@ -20,6 +20,24 @@ app.factory('ab', function ($http, $q, $timeout, $rootScope, $uibModal, $locatio
         })
     };
 
+    factory.httpPost = (webm, dataparams) => {
+        const params = new URLSearchParams();
+        for (var key in dataparams) {
+            if (dataparams.hasOwnProperty(key)) {
+                console.log(key + " -> " + dataparams[key]);
+                params.append(key, dataparams[key]);
+            }
+        }
+
+        return axios({
+            method: 'post',
+            url: webm,
+            data: params,
+            config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        })
+
+    }
+
     return factory;
 
 });

@@ -28,14 +28,10 @@
 
 <body>
 
-  <div ng-controller="MasterController" layout="column" ng-cloak="">
-    <section layout="row" flex="">
-      <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" id="leftSideNav" md-disable-backdrop="true">
-        <div ng-include src="'common/html/sidenav.html'"></div>
-      </md-sidenav>
-    </section>
+  <div id="mainMasterBody" ng-controller="MasterController">
 
-    <section layout="row" layout-sm="row" layout-align="space-between center">
+
+    <section class="ben2" layout="row" layout-sm="row" layout-align="space-between start">
       <div>
         <img src="../assets/images/ocean_logo.png" alt="Girl in a jacket" width="110" height="40">
       </div>
@@ -48,8 +44,11 @@
       </div>
     </section>
 
- 
-    <div ng-switch="masterc.toShow">
+
+    <div id="mainBody" class="middle-aligner" ng-switch="masterc.toShow">
+      <div class="mainBodyClass" ng-switch-when="landing">
+        <ng-include src="'common/html/landing.html'" ng-controller="landing"></ng-include>
+      </div>
       <div ng-switch-when="login">
         <ng-include src="'common/html/login.html'" ng-controller="login"></ng-include>
       </div>
@@ -60,10 +59,14 @@
         <ng-include src="'common/html/test.html'" ng-controller="test"></ng-include>
       </div>
     </div>
- 
-   
-  </div>
 
+
+  </div>
+  <section class="sidenavClass" layout="row" flex>
+    <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4" id="leftSideNav" md-disable-backdrop="true">
+      <div ng-include src="'common/html/sidenav.html'"></div>
+    </md-sidenav>
+  </section>
 
   <script>
     require('../renderer.js')
@@ -72,6 +75,7 @@
   <script src="ang_sv.js"></script>
   <script src="ang_master.js"></script>
   <script src="common/js/login.js"></script>
+  <script src="common/js/landing.js"></script>
 
 
 

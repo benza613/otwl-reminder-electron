@@ -16,10 +16,6 @@ const { setup: setupPushReceiver } = require('electron-push-receiver');
 
 function createWindow() {
 
-  settings.set('name', {
-    first: 'Cosmo',
-    last: 'Kramer'
-  });
   // Create the browser window.
   win = new BrowserWindow({ width: 800, frame: false, height: 600 })
 
@@ -48,7 +44,7 @@ function createWindow() {
     {
       label: 'Menu 1',
       submenu: [
-        { label: 'Adjust Notifcation Value' },
+        { label: 'Adjust Notifcation Value ' },
         {
           label: 'CoinMarketCap',
           click() {
@@ -96,7 +92,20 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow();
+
+
+
+  //settings.set('name', {
+  // first: 'Cosmo',
+  //  last: 'Kramer'
+  //});
+
+
+
+
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
