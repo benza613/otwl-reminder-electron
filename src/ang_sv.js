@@ -7,7 +7,7 @@ app.factory('ab', function ($http, $q, $timeout, $rootScope, $uibModal, $locatio
             form.$setPristine();
             form.$setUntouched();
         }
-    }
+    };
 
     factory.ajx = function (webm, dataparams) {
         return $http({
@@ -17,7 +17,7 @@ app.factory('ab', function ($http, $q, $timeout, $rootScope, $uibModal, $locatio
             data: dataparams,
             headers: { "Content-Type": "application/json" }
 
-        })
+        });
     };
 
     factory.httpPost = (webm, dataparams) => {
@@ -34,9 +34,9 @@ app.factory('ab', function ($http, $q, $timeout, $rootScope, $uibModal, $locatio
             url: webm,
             data: params,
             config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        })
+        });
 
-    }
+    };
 
     return factory;
 
@@ -48,7 +48,7 @@ app.factory('c', function ($http, $q, $timeout, $rootScope, $uibModal, $location
 
     var factory = function (form) {
         console.log(form);
-    }
+    };
 
     return factory;
 

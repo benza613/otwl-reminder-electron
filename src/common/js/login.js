@@ -1,40 +1,49 @@
-
-app.controller('login', function ($rootScope, $scope, $http, $uibModal, ab, c, uiGridConstants, $timeout, ) {
+app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
 
 
     $scope.vm = {
         formData: {
-            email: '',
-            password: ''
+            username: '',
+            password: '',
         }
     };
 
     $scope.vm.submit = () => {
 
-        // const params = new URLSearchParams();
-        // params.append('auth_token', 'F068B6AF-BC7E-45E7-A18C-A47B6C8A4E7B');
+        $scope.switchHard('landing');
+
+        $timeout(() => {
+            $scope.switchHard('login');
+
+        }, 4000);
+        // ab.httpPost('http://otwlfrt4.azurewebsites.net/api/oceanreminder/desk_rem_login', {
+        //         'uname': $scope.vm.formData.username,
+        //         'upass': $scope.vm.formData.password,
+        //     })
+        //     .then(response => {
+        //         console.log(response);
+
+        //         if (response != null) {
+        //             alert(response.resultmessage);
+
+        //             if (response.resultnumber == 1) {
+        //                 $scope.$broadcast('login-success');
+        //                 _settings.set('auth_token', response.auth_token);
+
+        //                 $scope.masterc.toShow = "landing";
 
 
+        //             }
+        //         }
 
-        // axios({
-        //     method: 'post',
-        //     url: 'http://otwlfrt4.azurewebsites.net/api/ocean/sp_MA_GetJobs',
-        //     data: params,
-        //     config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        // })
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //         alert('hi');
+        //         $scope.masterc.toShow = "login";
 
-        ab.httpPost('http://otwlfrt4.azurewebsites.net/api/ocean/sp_MA_GetJobs', {
-            'auth_token': 'F068B6AF-BC7E-45E7-A18C-A47B6C8A4E7B'
-        })
-            .then(response => {
-                console.log(response)
-                console.log('ben')
-
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
+        //     });
+    };
 
 
 });
