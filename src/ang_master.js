@@ -16,17 +16,14 @@ const _globalApiDev = "http://localhost:56259/api/otwlreminder/";
 app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $mdSidenav) {
     $rootScope.pending = 'Feature Pending. Currently Under Development.';
 
-
+    $rootScope.mainapp = {
+        showWait: false,
+    };
 
     $scope.masterc = {};
-    $rootScope.toShowReason = "";
 
-    $scope.masterc.switchHard = function (value, reason) {
-        console.log('here');
+    $scope.masterc.switchHard = function (value) {
         $scope.masterc.toShow = value;
-
-        if (reason != undefined)
-            $rootScope.toShowReason = reason;
 
     };
 
@@ -34,7 +31,7 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
     if (_settings.has('auth_token')) {
         //do autologin
-        $scope.masterc.switchHard('landing', 'auto-login-in-progress');
+        $scope.masterc.switchHard('landing');
 
     } else {
         //open login form 

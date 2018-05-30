@@ -1,4 +1,6 @@
-<div layout="column" layout-align="space-around center" ng-cloak="ng-cloak">
+
+<div ng-show="!mainapp.showWait" layout="column" layout-align="space-around center" ng-cloak="ng-cloak">
+
     <md-card flex="flex" flex-xs="100" flex-sm="80" flex-gt-sm="80" flex-gt-md="120" flex-lg="120">
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -10,7 +12,7 @@
         <md-card-content>
             <form name="Form">
                 <md-input-container class="md-block">
-                    <label>Login</label> 
+                    <label>Login</label>
                     <input type="text" name="username" ng-model="vm.formData.username" placeholder="Please enter your username" required="" />
                     <div ng-messages="Form.username.$error" role="alert" multiple="">
                         <div ng-message="required" class="my-message">Please enter your username.</div>
@@ -30,3 +32,4 @@
         </md-card-content>
     </md-card>
 </div>
+<loading-screen01 />

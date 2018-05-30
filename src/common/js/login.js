@@ -8,10 +8,10 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
         }
     };
 
+
     $scope.vm.submit = () => {
 
-        //$scope.masterc.switchHard('landing', 'login-in-progress');
-
+        $rootScope.mainapp.showWait = true;
         let macid = "";
         if (_os.networkInterfaces().Ethernet.filter((x) => x.family == "IPv4").length > 0) {
             macid = _os.networkInterfaces().Ethernet.filter((x) => x.family == "IPv4")[0].mac;
@@ -30,14 +30,15 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
                 console.log(r);
 
                 if (r != null && r.data != null) {
-
+                    $scope.$apply(function () {
+                        $rootScope.mainapp.showWait = false;
+                    }); 
                     if (r.data.db_status == "true") {
                         _settings.set('auth_token', r.data.auth_token);
-                        $timeout(()=>{
-                            $scope.masterc.switchHard('reminder', '1');
-
-                        },1000);
-
+                    
+                        $scope.$apply(function () {
+                            $scope.masterc.switchHard('reminder');
+                        }); 
                     }
                 }
 
@@ -50,5 +51,11 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
             });
     };
 
+    $scope.vm.init = () => {
+        $rootScope.mainapp.showWait = false;
 
+
+    };
+
+    $scope.vm.init();
 });

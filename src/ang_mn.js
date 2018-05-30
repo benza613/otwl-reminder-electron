@@ -25,28 +25,28 @@ app.config(['$httpProvider', '$compileProvider', '$mdThemingProvider', function 
         'A700': '1a7fff',
         'contrastDefaultColor': 'light',
         'contrastDarkColors': [
-          '50',
-          '100',
-          '200',
-          '300',
-          'A100',
-          'A200'
+            '50',
+            '100',
+            '200',
+            '300',
+            'A100',
+            'A200'
         ],
         'contrastLightColors': [
-          '400',
-          '500',
-          '600',
-          '700',
-          '800',
-          '900',
-          'A400',
-          'A700'
+            '400',
+            '500',
+            '600',
+            '700',
+            '800',
+            '900',
+            'A400',
+            'A700'
         ]
     });
 
     $mdThemingProvider.theme('default')
         .primaryPalette('mcgpalette0')
-      .accentPalette('red')
+        .accentPalette('red');
 
 
 
@@ -58,12 +58,34 @@ app.config(['$httpProvider', '$compileProvider', '$mdThemingProvider', function 
     //disable IE ajax request caching
     $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Sat, 01 Jan 2000 00:00:00 GMT';
     $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-    $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+    $httpProvider.defaults.headers.get.Pragma = 'no-cache';
     //EOF disable IE ajax request caching
 
     //$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 
 }]);
+
+
+app.directive('loadingScreen01', function () {
+    return {
+        restrict: 'E',
+
+        template: function (elem, attr) {
+
+            return `<div id="showwait" ng-show="mainapp.showWait" class="loading_screen_showwait" style="text-align: center">
+            <h2 style="color:#006699">
+                Ocean Transworld Reminder 
+            </h2>
+            <h4>
+                Kindly wait while we authenticate your credentials...
+            </h4>
+            <div class="col-sm-12">
+                <md-progress-linear md-mode="indeterminate" ng-disabled="!mainapp.showWait"></md-progress-linear>
+            </div>
+        </div>`;
+        }
+    };
+});
 
 app.directive('checkNumber', function () {
     return {
@@ -110,6 +132,5 @@ app.directive('jaccessibleForm', function ($timeout) {
 app.filter('trustedHtml', function ($sce) {
     return function (value) {
         return $sce.trustAsHtml(value);
-    }
+    };
 });
-
