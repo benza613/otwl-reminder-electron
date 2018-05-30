@@ -46,17 +46,17 @@
 
 
     <div id="mainBody" class="middle-aligner" ng-switch="masterc.toShow">
-      <div  ng-switch-when="landing">
+      <div ng-switch-when="landing">
         <ng-include src="'common/html/landing.html'" ng-controller="landing"></ng-include>
       </div>
-      <div  ng-switch-when="login">
+      <div ng-switch-when="login">
         <ng-include src="'common/html/login.html'" ng-controller="login"></ng-include>
       </div>
-      <div  ng-switch-when="reminder">
+      <div ng-switch-when="reminder">
         <ng-include src="'common/html/reminder.html'" ng-controller="reminder"></ng-include>
       </div>
       <div ng-switch-when="test">
-        <ng-include src="'common/html/test.html'" ng-controller="test"></ng-include>
+        <ng-include src="'common/html/test.html'"></ng-include>
       </div>
     </div>
 
@@ -76,6 +76,7 @@
   <script src="ang_master.js"></script>
   <script src="common/js/login.js"></script>
   <script src="common/js/landing.js"></script>
+  <script src="common/js/reminder.js"></script>
 
 
 

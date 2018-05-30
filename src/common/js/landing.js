@@ -1,4 +1,4 @@
-app.controller('landing', function ($rootScope, $scope, ab, c, $q,$timeout) {
+app.controller('landing', function ($rootScope, $scope, ab, c, $q, $timeout) {
     $scope.close();
 
     $scope.landing = {
@@ -21,29 +21,22 @@ app.controller('landing', function ($rootScope, $scope, ab, c, $q,$timeout) {
     };
 
     $scope.landing.checkReason = () => {
-        alert($scope.masterc.toShowReason);
-     
+        switch ($rootScope.toShowReason) {
+            case "login-in-progress":
+                $scope.landing.banner = "Kindly wait while we establish connection...";
+                break;
+            case "auto-login-in-progress":
+                $scope.landing.banner = "Kindly wait while we authenticate your credentials...";
+                break;
+            case "1":
+                $scope.landing.banner = "";
+                break;
+            default:
+                $scope.landing.banner = "Kindly wait while we authenticate your credentials...";
+                break;
+        }
+
     };
-
-    $rootScope.$on('login-in-progress', function (evt, args) {
-        alert('why');
-
-        $scope.landing.circularProg = false;
-        $scope.masterc.toShow = "landing";
-        $scope.landing.banner = "Kindly wait while we authenticate your credentials...";
-
-    });
-
-    $rootScope.$on('auto-login-in-progress', function (evt, args) {
-
-        $scope.landing.circularProg = false;
-        $scope.masterc.toShow = "landing";
-        $scope.landing.banner = "Kindly wait while we validate your credentials...";
-
-    });
-
-
-
     $scope.landing.init();
 
 

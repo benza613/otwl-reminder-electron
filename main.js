@@ -1,8 +1,9 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 const url = require('url');
+
 const shell = require('electron').shell;
-const settings = require('electron-settings');
+
 //process call handler
 const { ipcMain } = require('electron');
 
@@ -31,6 +32,8 @@ function createWindow() {
 
   // Open the DevTools.
   win.webContents.openDevTools();
+
+  
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -94,7 +97,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-
+ 
 
 
   //settings.set('name', {

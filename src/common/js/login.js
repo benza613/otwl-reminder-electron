@@ -10,39 +10,44 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
 
     $scope.vm.submit = () => {
 
-        $scope.switchHard('landing');
+        //$scope.masterc.switchHard('landing', 'login-in-progress');
 
-        $timeout(() => {
-            $scope.switchHard('login');
+        let macid = "";
+        if (_os.networkInterfaces().Ethernet.filter((x) => x.family == "IPv4").length > 0) {
+            macid = _os.networkInterfaces().Ethernet.filter((x) => x.family == "IPv4")[0].mac;
+        }
 
-        }, 4000);
-        // ab.httpPost('http://otwlfrt4.azurewebsites.net/api/oceanreminder/desk_rem_login', {
-        //         'uname': $scope.vm.formData.username,
-        //         'upass': $scope.vm.formData.password,
-        //     })
-        //     .then(response => {
-        //         console.log(response);
+        let hostname = _os.hostname();
 
-        //         if (response != null) {
-        //             alert(response.resultmessage);
+        ab.httpPost(_globalApiDev + 'usr_signin', {
+                'uname': $scope.vm.formData.username,
+                'upass': $scope.vm.formData.password,
+                'macid': macid,
+                'hostname': hostname,
+                'device_token': _settings.get('device_token', ''),
+            })
+            .then(r => {
+                console.log(r);
 
-        //             if (response.resultnumber == 1) {
-        //                 $scope.$broadcast('login-success');
-        //                 _settings.set('auth_token', response.auth_token);
+                if (r != null && r.data != null) {
 
-        //                 $scope.masterc.toShow = "landing";
+                    if (r.data.db_status == "true") {
+                        _settings.set('auth_token', r.data.auth_token);
+                        $timeout(()=>{
+                            $scope.masterc.switchHard('reminder', '1');
 
+                        },1000);
 
-        //             }
-        //         }
+                    }
+                }
 
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //         alert('hi');
-        //         $scope.masterc.toShow = "login";
+            })
+            .catch(error => {
+                console.log(error);
+                alert('hi');
+                $scope.masterc.toShow = "login";
 
-        //     });
+            });
     };
 
 
