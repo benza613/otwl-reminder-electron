@@ -86,13 +86,13 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, uiGrid
                     {
                         name: 'reminderDate',
                         field: "2",
-                        width: '14%',
+                        width: '17%',
 
                     },
                     {
                         name: 'Time',
                         field: "3",
-                        width: '17%',
+                        width: '13%',
 
                     },
                     {
@@ -127,13 +127,13 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, uiGrid
                     {
                         name: 'E',
                         cellTemplate: '<span role="button" class="grid-span-edit glyphicon glyphicon-pencil btn-sm" ng-click="grid.appScope.edit(row, rowRenderIndex)"></span>',
-                        width: '15%',
+                        width: '6%',
                         enableFiltering: false,
 
                     }, {
                         name: 'R',
                         cellTemplate: '<span role="button" class="grid-span-redirect glyphicon glyphicon-arrow-right btn-sm" ng-click="grid.appScope.showdynamicDiv(row)"></span>',
-                        width: '15%',
+                        width: '6%',
                         enableFiltering: false,
 
                     }

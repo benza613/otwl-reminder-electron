@@ -16,7 +16,7 @@ const {
 
 // Listen for service successfully started
 ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => {
-  //settings.deleteAll();
+  settings.deleteAll();
   settings.set('device_token', token);
   console.log(token);
 });
