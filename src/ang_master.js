@@ -10,8 +10,10 @@ const _os = require('os');
 const axios = require('axios');
 const _settings = require('electron-settings');
 
-const _globalApi = "http://otwlfrt4.azurewebsites.net/api/otwlreminder/";
+const _globalApiProd = "http://otwlfrt4.azurewebsites.net/api/otwlreminder/";
 const _globalApiDev = "http://localhost:56259/api/otwlreminder/";
+
+const _globalApi = _globalApiDev;
 
 app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $mdSidenav) {
     $rootScope.pending = 'Feature Pending. Currently Under Development.';

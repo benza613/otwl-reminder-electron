@@ -1,1 +1,16 @@
-rem
+<div ng-show="!mainapp.showWait" layout="column" layout-align="space-around center" ng-cloak="ng-cloak">
+
+    <div class="panel panel-sk">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title pull-left">Pending Reminders</h4>
+        </div>
+        <div class="panel-body">
+            <div id="grid1" 
+            ui-grid="reminder.gridOptions" 
+            ui-grid-auto-resize class="grid" 
+            style="text-align: center; height: 300px !important; width: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+<loading-screen01 />

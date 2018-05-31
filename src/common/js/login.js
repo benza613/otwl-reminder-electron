@@ -19,7 +19,7 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
 
         let hostname = _os.hostname();
 
-        ab.httpPost(_globalApiDev + 'usr_signin', {
+        ab.httpPost(_globalApi + 'usr_signin', {
                 'uname': $scope.vm.formData.username,
                 'upass': $scope.vm.formData.password,
                 'macid': macid,
@@ -44,9 +44,10 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
 
             })
             .catch(error => {
-                console.log(error);
-                alert('hi');
-                $scope.masterc.toShow = "login";
+                alert('Error Occured');
+                $scope.$apply(function () {
+                    $rootScope.mainapp.showWait = false;
+                }); 
 
             });
     };
