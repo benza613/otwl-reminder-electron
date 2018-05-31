@@ -1,11 +1,17 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  Menu
+} = require('electron');
 const path = require('path');
 const url = require('url');
 
 const shell = require('electron').shell;
 
 //process call handler
-const { ipcMain } = require('electron');
+const {
+  ipcMain
+} = require('electron');
 
 
 app.setAppUserModelId('com.electron.benappid');
@@ -13,12 +19,18 @@ app.setAppUserModelId('com.electron.benappid');
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-const { setup: setupPushReceiver } = require('electron-push-receiver');
+const {
+  setup: setupPushReceiver
+} = require('electron-push-receiver');
 
 function createWindow() {
 
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, frame: false, height: 600 });
+  win = new BrowserWindow({
+    width: 800,
+    frame: false,
+    height: 600
+  });
 
   // and load the index.html of the app.
   win.loadURL(url.format({
@@ -31,9 +43,9 @@ function createWindow() {
   setupPushReceiver(win.webContents);
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
-  
+
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -43,11 +55,11 @@ function createWindow() {
     win = null;
   });
 
-  var menu = Menu.buildFromTemplate([
-    {
+  var menu = Menu.buildFromTemplate([{
       label: 'Menu 1',
-      submenu: [
-        { label: 'Adjust Notifcation Value ' },
+      submenu: [{
+          label: 'Adjust Notifcation Value '
+        },
         {
           label: 'CoinMarketCap',
           click() {
@@ -67,8 +79,9 @@ function createWindow() {
     },
     {
       label: 'Menu 2',
-      submenu: [
-        { label: 'Adjust Notifcation Value' },
+      submenu: [{
+          label: 'Adjust Notifcation Value'
+        },
         {
           label: 'CoinMarketCap',
           click() {
@@ -97,7 +110,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
- 
+
 
 
   //settings.set('name', {
@@ -136,3 +149,6 @@ ipcMain.on('close-window-main', function (e) {
   app.quit();
 });
 
+ipcMain.on('req-dirname', function (e, a) {
+  e.returnValue = __dirname;
+});

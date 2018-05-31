@@ -4,7 +4,7 @@ body {
 
 body #mainMasterBody {
   width: 100%;
-  height: 85vh;
+  height: 92vh;
   display: flex;
   flex-direction: column;
 }
@@ -13,6 +13,10 @@ body #mainMasterBody #mainBody {
   background-color: rgb(233, 232, 232);
   vertical-align: middle;
   flex: 1;
+}
+
+body #mainMasterBody #mainBody .reminderClass{
+  height: 100%;
 }
 
 .md-button {
