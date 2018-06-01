@@ -53,6 +53,13 @@ app.controller('landing', function ($rootScope, $scope, ab, c, $q, $timeout) {
 
             })
             .catch(error => {
+                let myNotificationErr = new window.Notification('Error Occured', {
+                    body: 'Could Not sync Data'
+                });
+
+                myNotificationErr.onclick = () => {
+                    console.log('Notification clicked');
+                };
                 $scope.$apply(function () {
                     $scope.masterc.switchHard('login');
                 });

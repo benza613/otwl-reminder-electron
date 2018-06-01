@@ -43,7 +43,7 @@ function createWindow() {
   setupPushReceiver(win.webContents);
 
   // Open the DevTools.
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
 
 
@@ -149,6 +149,7 @@ ipcMain.on('close-window-main', function (e) {
   app.quit();
 });
 
+//not used 
 ipcMain.on('req-dirname', function (e, a) {
   e.returnValue = __dirname;
 });

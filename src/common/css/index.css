@@ -17,6 +17,7 @@ body #mainMasterBody #mainBody {
 
 body #mainMasterBody #mainBody .reminderClass{
   height: 100%;
+  font-size: 12px;
 }
 
 .md-button {

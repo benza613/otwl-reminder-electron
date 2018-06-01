@@ -11,11 +11,12 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, uiGrid
             $scope.reminder.set.rem_grid();
             $rootScope.mainapp.showWait = false;
 
-            $timeout(()=>{
+            $timeout(() => {
                 $scope.reminder.get.reminders();
-            },1000);
-            
+            }, 1000);
+
         }
+        alert('1')
     };
 
     $scope.reminder.get = {
@@ -48,7 +49,13 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, uiGrid
                             });
 
                         } else {
-                            alert('Error Occured while fetching reminders');
+                            let myNotificationErr = new window.Notification('Error Occured', {
+                                body: 'Could Not sync Data'
+                            });
+
+                            myNotificationErr.onclick = () => {
+                                console.log('Notification clicked');
+                            };
                         }
                     }
 
@@ -72,7 +79,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, uiGrid
                 flatEntityAccess: true,
                 fastWatch: true,
                 showGridFooter: true,
-                rowHeight: 35,
+                rowHeight: 32,
                 columnDefs: [{
                         name: 'subDepartment',
                         field: "0",
@@ -80,27 +87,32 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, uiGrid
                     },
                     {
                         name: 'reminderText',
+                        displayName: 'Reminder',
                         field: "1",
                         width: '35%',
                     },
                     {
+                        displayName: 'Date',
                         name: 'reminderDate',
                         field: "2",
                         width: '17%',
 
                     },
                     {
-                        name: 'Time',
+                        displayName: 'Time',
+                        name: 'reminderTime',
                         field: "3",
                         width: '13%',
 
                     },
                     {
+                        displayName: 'Type',
                         name: 'reminderType',
                         field: "4",
                         width: '10%',
                     },
                     {
+                        displayName: 'Priority',
                         name: 'reminderPriority',
                         field: "5",
                         filter: {
@@ -126,13 +138,13 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, uiGrid
                     },
                     {
                         name: 'E',
-                        cellTemplate: '<span role="button" class="grid-span-edit glyphicon glyphicon-pencil btn-sm" ng-click="grid.appScope.edit(row, rowRenderIndex)"></span>',
+                        cellTemplate: '<span role="button" class="grid-span-edit glyphicon glyphicon-pencil btn-xs" ng-click="grid.appScope.edit(row, rowRenderIndex)"></span>',
                         width: '6%',
                         enableFiltering: false,
 
                     }, {
                         name: 'R',
-                        cellTemplate: '<span role="button" class="grid-span-redirect glyphicon glyphicon-arrow-right btn-sm" ng-click="grid.appScope.showdynamicDiv(row)"></span>',
+                        cellTemplate: '<span role="button" class="grid-span-redirect glyphicon glyphicon-arrow-right btn-xs" ng-click="grid.appScope.showdynamicDiv(row)"></span>',
                         width: '6%',
                         enableFiltering: false,
 
