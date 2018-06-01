@@ -31,9 +31,10 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
     };
 
-    // $interval(() => {
-    //    $scope.masterc.sync.DbReminders();
-    // }, 600000);
+    //is in 720 P 
+    $interval(() => {
+        $scope.masterc.sync.DbReminders();
+    }, 600000);
 
     if (_settings.has('auth_token')) {
         //do autologin
