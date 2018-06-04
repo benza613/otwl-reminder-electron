@@ -16,6 +16,7 @@ body #mainMasterBody #mainBody {
 }
 
 body #mainMasterBody #mainBody .reminderClass{
+  
   height: 100%;
   font-size: 12px;
 }
@@ -42,4 +43,8 @@ body #mainMasterBody #mainBody .reminderClass{
   border-color: #006699;
   font-weight: bold;
   font-family: 'Segoe UI';
+}
+
+.grid-span-edit{
+  color: #006699;
 }

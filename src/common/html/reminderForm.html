@@ -1,0 +1,76 @@
+<div class="modal-content">
+    <form name="form_rem" novalidate ng-submit="yes(form_rem)" >
+
+        <div class="modal-header">
+            <h3>Reminder Form</h3>
+        </div>
+        <div class="modal-body">
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>Reminder Date:</label>
+                </div>
+                <div class="col-sm-9">
+                    <p class="input-group" style="width:90%">
+                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="formDate" is-open="popup1.opened" datepicker-options="dateOptions"
+                            required="" ng-change="dateChanged()" close-text="Close" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openDt()">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <br />
+                    <label>Reminder Time:</label>
+                </div>
+                <div class="col-sm-3">
+                    <div uib-timepicker ng-model="formTime" ng-change="timeChanged()" hour-step="1" minute-step="10" show-meridian="false"></div>
+                </div>
+                <div class="col-sm-6">
+                    <br />
+                    <pre class="alert alert-info">Selected Time : {{formTime | date:'shortTime'}}</pre>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>Reminder:</label>
+                </div>
+                <div class="col-sm-9">
+                    <textarea id="txtremtext" ng-model="row.remText" class="remformstretch form-control" style="max-width: 90%; min-height:3em"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <br />
+                <div class="col-sm-3">
+                    <label>Reminder Type:</label>
+                </div>
+                <div class="col-sm-3">
+                    <pre class="alert alert-info">{{row.remType}}</pre>
+                </div>
+                <div class="col-sm-2">
+                    <label>Toggle Reminder Priority:</label>
+                </div>
+                <div class="col-sm-4">
+                    <a ng-class="{'0': 'btn-primary', '1': 'btn-danger'}[priority.toggle]" ng-click="priority.up()" class="btn">{{priority.text()}}Reminder</a>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Submit" />
+            <button type="button" class="btn btn-default" ng-click="discard()">Discard Changes</button>
+            <button type="button" class="btn btn-danger" ng-hide="isExistingRem" ng-click="deleteReminder()">Delete Reminder</button>
+
+        </div>
+    </form>
+
+</div>

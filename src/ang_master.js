@@ -31,10 +31,14 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
     };
 
-    //is in 720 P 
+    //will fetch reminders every 10 mins ie. 10min*60sec*1000ms
     $interval(() => {
         $scope.masterc.sync.DbReminders();
     }, 600000);
+
+    $interval(() => {
+        $scope.masterc.sync.LocalReminderTimer();
+    }, 120000);
 
     if (_settings.has('auth_token')) {
         //do autologin
@@ -107,6 +111,62 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
                     });
             }
+        },
+        LocalReminderTimer: () => {
+            if (_settings.has('auth_token')) {
+                _db.serialize(function () {
+
+                    let today = new Date();
+                    let dd = today.getDate();
+                    let mm = today.getMonth() + 1;
+                    let yyyy = today.getFullYear();
+                    if (dd < 10) {
+                        dd = '0' + dd;
+                    }
+
+                    if (mm < 10) {
+                        mm = '0' + mm;
+                    }
+
+                    let hh = today.getHours();
+                    let mn = today.getMinutes();
+                    
+                    today = dd + '/' + mm + '/' + yyyy;
+
+
+                    let tTime_minus1 = addZero(hh) + ':' + addZero(mn - 1);
+                    let tTime_plus1 = addZero(hh) + ':' + addZero(mn + 1);
+                    _db.all("SELECT * FROM tblreminders where r_date = ? and r_time BETWEEN ? and ? ", [today, tTime_minus1, tTime_plus1], function (err, rows) {
+
+                        if (rows.length > 0) {
+                            alert(rows.length + '  --  ' + rows[0]['r_text']);
+                        
+                            for (let idn = 0; idn < rows.length; idn++) {
+                                
+                            }
+                            let myNotificationNotif = new window.Notification('Reminder Alert', {
+                                body: rows[0]['r_text']
+                            });
+
+                            myNotificationNotif.onclick = () => {
+                                console.log('Notification clicked');
+                            };
+                        }
+
+
+                    });
+
+
+                });
+
+            }
         }
     }
 });
+
+function addZero(i) {
+    if (parseInt(i) < 10) {
+        i = "0" + parseInt(i);
+    }
+    return i;
+}
