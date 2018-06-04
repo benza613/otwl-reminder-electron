@@ -130,7 +130,7 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
                     let hh = today.getHours();
                     let mn = today.getMinutes();
-                    
+
                     today = dd + '/' + mm + '/' + yyyy;
 
 
@@ -139,18 +139,20 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
                     _db.all("SELECT * FROM tblreminders where r_date = ? and r_time BETWEEN ? and ? ", [today, tTime_minus1, tTime_plus1], function (err, rows) {
 
                         if (rows.length > 0) {
-                            alert(rows.length + '  --  ' + rows[0]['r_text']);
-                        
-                            for (let idn = 0; idn < rows.length; idn++) {
-                                
-                            }
-                            let myNotificationNotif = new window.Notification('Reminder Alert', {
-                                body: rows[0]['r_text']
-                            });
 
-                            myNotificationNotif.onclick = () => {
-                                console.log('Notification clicked');
-                            };
+                            let myNotificationNotif = {};
+                            for (let idn = 0; idn < rows.length; idn++) {
+                                myNotificationNotif[idn] = new window.Notification(rows[idn]['r_text'], {
+                                    body: 'Reminder Alert'
+                                });
+
+                                myNotificationNotif[idn].onclick = () => {
+                                    console.log('Notification clicked');
+                                };
+                            }
+
+
+                            //alert(rows.length + '  --  ' + rows[0]['r_text']);
                         }
 
 
