@@ -2,10 +2,15 @@
 const {
     ipcMain
 } = require('electron');
+
+const path = require('path');
+
 const {
     ipcRenderer,
     remote
 } = require('electron');
+
+const BrowserWindow = remote.BrowserWindow;
 const _os = require('os');
 const axios = require('axios');
 const _settings = require('electron-settings');
@@ -38,7 +43,7 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
     $interval(() => {
         $scope.masterc.sync.LocalReminderTimer();
-    }, 120000);
+    }, 30000);
 
     if (_settings.has('auth_token')) {
         //do autologin
@@ -141,15 +146,29 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
                         if (rows.length > 0) {
 
                             let myNotificationNotif = {};
-                            for (let idn = 0; idn < rows.length; idn++) {
-                                myNotificationNotif[idn] = new window.Notification(rows[idn]['r_text'], {
-                                    body: 'Reminder Alert'
-                                });
 
-                                myNotificationNotif[idn].onclick = () => {
-                                    console.log('Notification clicked');
-                                };
-                            }
+                            // myNotificationNotif[idn] = new window.Notification(rows[idn]['r_text'], {
+                            //     body: 'Reminder Alert'
+                            // });
+
+                            // myNotificationNotif[idn].onclick = () => {
+                            //     console.log('Notification clicked');
+                            // };
+
+                            const modalPath = path.join('file://', __dirname, 'notif.html');
+                            let winN = new BrowserWindow({
+                                width: 400,
+                                height: 200,
+                                frame: false,
+                                alwaysOnTop: true,
+                            });
+
+                            winN.on('close', function () {
+                                winN = null;
+                            });
+
+                            winN.loadURL(modalPath);
+                            winN.show();
 
 
                             //alert(rows.length + '  --  ' + rows[0]['r_text']);
