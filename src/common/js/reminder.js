@@ -225,9 +225,47 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
 
             modalInstanceI.result.then(function (data) {
                 if (data.result === 1) {
-                    ab.httpPost(_globalApi + 'usr_ins_reminder', formdata)
+                    ab.httpPost(_globalApi + 'usr_ins_reminder', data.formdata)
                         .then(r => {
-                            c(r);
+                            if (r != null && r.data != null) {
+                                //auto login valid
+                                if (r.data.db_status == "true") {
+
+                                    _db.serialize(function () {
+                                        let stmt = _db.prepare("INSERT INTO tblreminders VALUES (?,?,?,?,?,?,?,?)");
+
+                                        for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
+
+                                            stmt.run(
+                                                r.data.db_data[rowIndex][6],
+                                                r.data.db_data[rowIndex][0],
+                                                r.data.db_data[rowIndex][1],
+                                                r.data.db_data[rowIndex][2],
+                                                r.data.db_data[rowIndex][3],
+                                                r.data.db_data[rowIndex][4],
+                                                r.data.db_data[rowIndex][5],
+                                                r.data.db_data[rowIndex][7]
+                                            )
+
+                                        }
+                                        stmt.finalize();
+
+                                        $scope.reminder.readLocalData();
+
+                                    });
+                                    //_db.close();
+
+
+                                } else {
+                                    let myNotificationErr = new window.Notification('Error Occured', {
+                                        body: 'Could Not sync Data'
+                                    });
+
+                                    myNotificationErr.onclick = () => {
+                                        console.log('Notification clicked');
+                                    };
+                                }
+                            }
 
                         })
                         .catch(error => {
@@ -286,7 +324,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                                     SET r_text = ? , r_date = ? , r_time = ? , r_priority = ?
                                     WHERE r_id = ? `);
                                     for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
-    
+
                                         stmt.run(
                                             r.data.db_data[rowIndex][1],
                                             r.data.db_data[rowIndex][2],
@@ -294,21 +332,21 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                                             r.data.db_data[rowIndex][5],
                                             r.data.db_data[rowIndex][6],
                                         )
-    
+
                                     }
                                     stmt.finalize();
-    
+
                                     $scope.reminder.readLocalData();
-    
+
                                 });
                                 //_db.close();
-    
-    
+
+
                             } else {
                                 let myNotificationErrU = new window.Notification('Error Occured', {
                                     body: 'Could Not Update Data'
                                 });
-    
+
                                 myNotificationErrU.onclick = () => {
                                     console.log('Notification clicked');
                                 };

@@ -12,11 +12,11 @@
     "pack": "build --dir",
     "dist": "build",
     "rebuild": "electron-rebuild -f -w sqlite3",
-    "dev-rebuild-windows-ben":"install -g windows-build-tools"
+    "dev-rebuild-windows-ben": "install -g windows-build-tools"
   },
   "build": {
     "appId": "com.electron.benappid",
-    "productName": "Electron_Crpto",
+    "productName": "OTWL REMINDER",
     "dmg": {
       "contents": [
         {
@@ -40,6 +40,9 @@
     "win": {
       "target": "nsis",
       "icon": "assets/icons/win/icon.ico"
+    },
+    "squirrelWindows": {
+      "useAppIdAsId": true
     }
   },
   "keywords": [],
