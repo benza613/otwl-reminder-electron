@@ -75,7 +75,7 @@ app.controller('reminderFormController', function ($rootScope, $scope, $http, $u
         }
         //ab.reset_form(form);
 
-      
+
         if ($scope.row.remTime != null) {
             $uibModalInstance.close({
                 result: 1,
@@ -104,8 +104,17 @@ app.controller('reminderFormController', function ($rootScope, $scope, $http, $u
             text: 'No sql :) '
         });
     };
+    $scope.deleteReminder = function () {
+        $uibModalInstance.close({
+            result: 2,
+            formdata: {
+                rID: $scope.row.remID,
+                auth_token: _settings.get('auth_token')
+            }
+        });
+    }
 
-   
+
 
     function formatDate(d) {
         return addZero(d.getDate()) +

@@ -358,9 +358,42 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                             });
 
                         });
+                } else if (data.result === 2) {
+                    //restore since "esc" was clicked
+                    $rootScope.mainapp.showWait = true;
+
+                    ab.httpPost(_globalApi + 'usr_ins_delete', data.formdata)
+                        .then(r => {
+                            c(r);
+                            if (r.data.db_status == "true") {
+
+                                _db.serialize(function () {
+                                    let stmt = _db.prepare(`
+                 DELETE FROM tblreminders 
+                 WHERE r_id = ? `);
+                                    stmt.run(r.data.db_data);
+
+                                    stmt.finalize();
+
+                                    $scope.reminder.readLocalData();
+
+                                });
+
+                            } else {
+                                let myNotificationErrU = new window.Notification('Error Occured', {
+                                    body: 'Could Not Delete Data'
+                                });
+
+                            }
+                        })
+                        .catch(error => {
+                            $scope.$apply(function () {
+                                $scope.masterc.switchHard('login');
+                            });
+
+                        });
                 }
             }).catch(function () {
-                //restore since "esc" was clicked
 
             });
 
