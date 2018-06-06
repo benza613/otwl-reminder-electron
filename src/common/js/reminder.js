@@ -203,7 +203,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                 remText: "",
                 remDate: null,
                 remTime: "14:00",
-                remType: "",
+                remType: "General",
                 remID: "0",
                 remPriority: "0",
             };
