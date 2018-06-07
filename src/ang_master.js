@@ -41,9 +41,12 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
         $scope.masterc.sync.DbReminders();
     }, 600000);
 
-    $interval(() => {
-        $scope.masterc.sync.LocalReminderTimer();
-    }, 30000);
+    if (_settings.get('timer_init_otwl') == 1) {
+        _settings.set('timer_init_otwl', 2);
+        $interval(() => {
+            $scope.masterc.sync.LocalReminderTimer();
+        }, 30000);
+    }
 
     if (_settings.has('auth_token')) {
         //do autologin
@@ -145,7 +148,7 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
                         if (rows.length > 0) {
 
-                            let myNotificationNotif = {};
+                            //let myNotificationNotif = {};
 
                             // myNotificationNotif[idn] = new window.Notification(rows[idn]['r_text'], {
                             //     body: 'Reminder Alert'
@@ -155,7 +158,7 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
                             //     console.log('Notification clicked');
                             // };
 
-                            const modalPath = path.join('file://', __dirname, 'notif.html');
+                            const modalPath = path.join('file://', __dirname, 'notif.html?rtxt=' + encodeURIComponent(rows[0]['r_text']));
                             let winN = new BrowserWindow({
                                 width: 400,
                                 height: 200,
