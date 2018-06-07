@@ -2,7 +2,8 @@ const {
   app,
   BrowserWindow,
   Menu,
-  Tray
+  Tray,
+  nativeImage 
 } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -18,7 +19,7 @@ const {
 app.setAppUserModelId('com.electron.benappid');
 
 app.setLoginItemSettings({
-  openAtLogin: true,
+  openAtLogin: false,
 });
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -89,7 +90,12 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  tray = new Tray('./Ologo.PNG');
+  //prod path 
+  //tray = new Tray(nativeImage.createFromPath('resources/app.asar/ologo_Tyn_2.ico'));
+
+  //dev path 
+  tray = new Tray(nativeImage.createFromPath('./ologo_Tyn_2.ico'));
+  
   const contextMenu = Menu.buildFromTemplate([{
       label: 'ADMIN',
       type: 'radio',
