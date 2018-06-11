@@ -2,9 +2,10 @@
   "name": "otwl",
   "version": "1.0.0",
   "description": "Test app for benito",
-  "main": "main.js",
+  "main": "main2.js",
   "scripts": {
-    "start": "electron .",
+    "start": "cross-env ELECTRON_IS_DEV=1 electron .",
+    "startProd": "cross-env ELECTRON_IS_DEV=0 electron .",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"ReminderApp\"",
     "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds",
@@ -18,8 +19,7 @@
     "appId": "com.electron.benappid",
     "productName": "OTWL REMINDER",
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "x": 110,
           "y": 150
         },
@@ -38,17 +38,20 @@
       ]
     },
     "win": {
-      "target": "nsis",
+      "target": "squirrel",
       "icon": "assets/icons/win/icon.ico"
     },
     "squirrelWindows": {
       "useAppIdAsId": true
+
     }
   },
+
   "keywords": [],
-  "author": "",
+  "author": "BENITO ALVARES",
   "license": "ISC",
   "devDependencies": {
+    "cross-env": "^5.1.6",
     "electron": "2.0.0",
     "electron-builder": "^20.11.1",
     "electron-packager": "^12.0.2",
@@ -56,8 +59,12 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "electron-builder-squirrel-windows": "^20.15.0",
+    "electron-is-dev": "^0.3.0",
     "electron-push-receiver": "^2.0.0",
     "electron-settings": "^3.2.0",
+    "electron-simple-updater": "^1.2.3",
+    "electron-squirrel-startup": "^1.0.0",
     "sqlite3": "^4.0.0"
   }
 }
