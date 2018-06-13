@@ -1,6 +1,6 @@
 {
   "name": "otwl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Test app for benito",
   "main": "main2.js",
   "scripts": {
@@ -38,7 +38,15 @@
       ]
     },
     "win": {
-      "target": "squirrel",
+      "target": [
+        {
+          "target": "squirrel",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
       "icon": "assets/icons/win/icon.ico"
     },
     "squirrelWindows": {

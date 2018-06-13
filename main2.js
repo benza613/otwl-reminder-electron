@@ -9,7 +9,7 @@ const path = require('path');
 const url = require('url');
 
 const isDev = require('electron-is-dev'); // this is required to check if the app is running in development mode. 
-const {appUpdater} = require('./autoupdater');
+const autoUpdater = require('./auto-updater')
 
 const shell = require('electron').shell;
 var _settings = require('electron-settings');
@@ -21,7 +21,7 @@ const {
 /* Handling squirrel.windows events on windows 
 only required if you have build the windows with target squirrel. For NSIS target you don't need it. */
 if (require('electron-squirrel-startup')) {
-	app.quit();
+  app.quit();
 }
 
 app.setAppUserModelId('com.electron.benappid');
@@ -98,6 +98,10 @@ function createWindow() {
     }
   });
 
+  win.webContents.on('did-finish-load', () => {
+    autoUpdater.init(win)
+  })
+
 
 }
 
@@ -145,23 +149,6 @@ app.on('ready', () => {
     createWindow();
   });
 
-  const page = win.webContents;
-
-  page.once('did-frame-finish-load', () => {
-    const checkOS = isWindowsOrmacOS();
-    
-    if (isDev) {
-      console.log('Running in development');
-    } else {
-      console.log('Running in production');
-    }
-
-    if (checkOS && !isDev) {
-      // Initate auto-updates on macOs and windows
-      appUpdater();
-      console.log('autoupdater call');
-    }
-  });
 
 });
 

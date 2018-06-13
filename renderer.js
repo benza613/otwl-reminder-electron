@@ -5,6 +5,22 @@ const settings = require('electron-settings');
 const {
   ipcRenderer
 } = require('electron');
+//*********************
+let lastMsgId = 0
+
+window.quitAndInstall = function () {
+  electron.remote.autoUpdater.quitAndInstall();
+}
+
+ipcRenderer.on('console', (event, consoleMsg) => {
+  console.log(consoleMsg)
+})
+
+ipcRenderer.on('message', (event, data) => {
+  showMessage(data.msg, data.hide, data.replaceAll)
+})
+
+//***************
 const {
   START_NOTIFICATION_SERVICE,
   NOTIFICATION_SERVICE_STARTED,
@@ -58,3 +74,24 @@ ipcRenderer.on(NOTIFICATION_RECEIVED, (_, serverNotificationPayload) => {
 const senderId = '1072974766716'; // <-- replace with FCM sender ID from FCM web admin under Settings->Cloud Messaging
 console.log('starting service and registering a client');
 ipcRenderer.send(START_NOTIFICATION_SERVICE, senderId);
+
+
+function showMessage(message, hide = true, replaceAll = false) {
+  const messagesContainer = document.querySelector('.messages-container')
+  const msgId = lastMsgId++ + 1
+  const msgTemplate = `<div id="${msgId}" class="alert alert-info alert-info-message animated fadeIn">${message}</div>`
+
+  if (replaceAll) {
+    messagesContainer.innerHTML = msgTemplate
+  } else {
+    messagesContainer.insertAdjacentHTML('afterbegin', msgTemplate)
+  }
+
+  if (hide) {
+    setTimeout(() => {
+      const msgEl = document.getElementById(msgId)
+      msgEl.classList.remove('fadeIn')
+      msgEl.classList.add('fadeOut')
+    }, 4000)
+  }
+}
