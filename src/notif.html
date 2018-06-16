@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +10,30 @@
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/add.css">
 </head>
+
 <body>
-    
+
     <p class="notify">NEW REMINDER</p>
 
-    <div class="row2">
+    <div class="row3" id="remtextval">
+
+    </div>
+    <div class="row3" style="font: size 11px;font-style: italic;">
         <div>
-            <textarea id="notifyVal" placeholder="USD" disabled="disabled" rows="2"></textarea>
+            <u>Postpone reminder (in minutes)</u> : 
+            <input id="postponeVal" placeholder="USD" value="60" style="width:40px"/>
         </div>
-        <button id="closeBtn">Close</button>
+
+    </div>
+
+    <div class="row2">
+        <button id="PostPoneBtn" class="btnRem">Postpone</button>
+
+        <button id="closeBtn" class="btnRem">Close</button>
     </div>
 
 
-<script src="notif.js"></script>
+    <script src="notif.js"></script>
 </body>
+
 </html>

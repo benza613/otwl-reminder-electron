@@ -10,7 +10,7 @@ body {
     width: 100%;
     margin-top: 50px;
     background: #1A1A1A;
-    border-bottom: 3px solid #FF0057;
+    border-bottom: 3px solid #006699;
     display: grid;
     grid-template-columns: 35% auto 35%;
     align-items: center;
@@ -43,7 +43,7 @@ h1 {
 
 button {
     float: right;
-    background: #FF0057;
+    background: #006699;
     border: none;
     color: #fff;
     text-transform: uppercase;

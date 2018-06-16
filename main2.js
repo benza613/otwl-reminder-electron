@@ -99,7 +99,8 @@ function createWindow() {
   });
 
   win.webContents.on('did-finish-load', () => {
-    autoUpdater.init(win)
+    // autoUpdater.init(win)
+
   })
 
 
@@ -146,7 +147,8 @@ app.on('ready', () => {
   createWindow();
   tray.on('double-click', () => {
 
-    createWindow();
+  win.show();
+//    createWindow();
   });
 
 
@@ -178,7 +180,12 @@ ipcMain.on('close-window-main', function (e) {
   win.hide();
 });
 
-//not used 
-ipcMain.on('req-dirname', function (e, a) {
-  e.returnValue = __dirname;
+ipcMain.on('snooze-specific-rem', function (e, arg) {
+  win.webContents.send('snooze-postpone', arg);
+  win.show();
+  //win.unmaximize();
+});
+
+ipcMain.on('refresh-reminder-table-1', function (e, arg) {
+  win.webContents.send('refresh-reminder-table', arg);
 });

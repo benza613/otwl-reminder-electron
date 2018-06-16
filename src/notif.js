@@ -1,7 +1,9 @@
 const electron = require('electron');
 const path = require('path');
 const remote = electron.remote;
+const ipc = electron.ipcRenderer;
 
+var nt_rid = "";
 var getParams = function (url) {
     var params = {};
     var parser = document.createElement('a');
@@ -15,15 +17,26 @@ var getParams = function (url) {
     return params;
 };
 
-document.getElementById("notifyVal").value = getParams(window.location.href).rtxt.toUpperCase();
+document.getElementById("remtextval").innerHTML = getParams(window.location.href).rtxt.toUpperCase();
+nt_rid = getParams(window.location.href).rid;
 
 const closeBtn = document.getElementById('closeBtn');
-
-
 closeBtn.addEventListener('click', function (e) {
 
     var wind = remote.getCurrentWindow()
+    wind.close()
 
+})
+
+const postponeBtn = document.getElementById('PostPoneBtn');
+postponeBtn.addEventListener('click', function (e) {
+
+    var wind = remote.getCurrentWindow();
+
+    ipc.send('snooze-specific-rem', {
+        nt_rid: nt_rid,
+        nt_postponeval: document.getElementById("postponeVal").value.replace(/\D/g,''),
+    });
     wind.close()
 
 })

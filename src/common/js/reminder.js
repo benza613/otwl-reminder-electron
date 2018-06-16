@@ -437,4 +437,8 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
     }
 
     $scope.reminder.init();
+
+    ipcRenderer.on('refresh-reminder-table', function (e, arg) {
+        $scope.reminder.readLocalData();
+    });
 });

@@ -5,8 +5,9 @@ body{
 }
 
 p.notify{
-    background: #c3c3c3;
+    background: #006699;
     margin: 0;
+    color: #fff;
     padding:20px;
     text-transform: uppercase;
     -webkit-app-region:drag;
@@ -19,8 +20,21 @@ p.notify{
     padding:20px;
 }
 
+.row3{
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    padding-bottom:5px;
+    padding-top:10px;
+    padding-left:20px;
+    padding-right:20px;
+}
+
 input{
-    padding: 12px;
+    padding-bottom:5px;
+    padding-top:5px;
+    padding-left:12px;
+    padding-right:12px;
 }
 
 #closeBtn{
@@ -32,4 +46,13 @@ input{
 html,body{
     background: rgba(226,226,226,0.5);
     height: 100%;
+}
+
+button.btnRem {
+    padding-bottom:2px;
+    padding-top:2px;
+    padding-left:5px;
+    padding-right:5px;
+    margin-right: 30px;
+    cursor: pointer;
 }

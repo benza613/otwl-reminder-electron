@@ -1,6 +1,7 @@
 {
   "name": "otwl",
-  "version": "1.0.1",
+  "productName": "OTWL REMINDER",
+  "version": "1.0.5",
   "description": "Test app for benito",
   "main": "main2.js",
   "scripts": {

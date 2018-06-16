@@ -88,12 +88,6 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
                             //auto login valid
                             if (r.data.db_status == "true") {
 
-                                // _db.serialize(function(){
-
-                                //_db.run("CREATE TABLE if not exists tblreminders (rid TEXT, info TEXT, info12 TEXT)");
-
-                                // });
-
 
                                 $scope.$apply(function () {
                                     $rootScope.mainapp.showWait = false;
@@ -158,10 +152,10 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
                             //     console.log('Notification clicked');
                             // };
 
-                            const modalPath = path.join('file://', __dirname, 'notif.html?rtxt=' + encodeURIComponent(rows[0]['r_text']));
+                            const modalPath = path.join('file://', __dirname, 'notif.html?rtxt=' + encodeURIComponent(rows[0]['r_text']) + '&rid=' + encodeURIComponent(rows[0]['r_id']));
                             let winN = new BrowserWindow({
-                                width: 400,
-                                height: 200,
+                                width: 450,
+                                height: 280,
                                 frame: false,
                                 alwaysOnTop: true,
                             });
@@ -186,6 +180,97 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
             }
         }
     }
+
+
+    ipcRenderer.on('snooze-postpone', function (e, arg) {
+
+        let intv_rem = Number(arg.nt_postponeval);
+        let update_rem_valid = 1;
+        if (intv_rem > 60) {
+            intv_rem = 60;
+        }
+
+        _db.serialize(function () {
+
+            if (arg.nt_rid != "") {
+                _db.all("SELECT * FROM tblreminders where r_id = ?", [arg.nt_rid], function (err, rows) {
+                    if (rows.length > 0) {
+
+                        let time_tbm = rows[0]['r_time'].split(":");
+
+                        if (intv_rem == 60) {
+                            if (Number(time_tbm[0]) < 23) {
+                                time_tbm[0] = Number(time_tbm[0]) + 1;
+                            } else {
+                                update_rem_valid = 0;
+                            }
+                        } else if (intv_rem < 60 && intv_rem > 0) {
+                            let mins_tot = Number(time_tbm[1]) + intv_rem;
+                            if (mins_tot >= 60) {
+                                if (Number(time_tbm[0]) < 23) {
+                                    time_tbm[0] = Number(time_tbm[0]) + 1;
+                                    time_tbm[1] = Number(mins_tot) % 60;
+
+                                } else {
+                                    update_rem_valid = 0;
+                                }
+
+                            } else {
+                                time_tbm[1] = Number(mins_tot);
+                            }
+                        }
+
+
+                        let stmt = _db.prepare(`
+                        Update tblreminders 
+                        SET r_time = ?
+                        WHERE r_id = ? `);
+
+                        stmt.run(
+                            addZero(time_tbm[0]) + ':' + addZero(time_tbm[1]),
+                            arg.nt_rid
+                        )
+
+                        stmt.finalize();
+                        ipcRenderer.send('refresh-reminder-table-1', {});
+
+
+
+                        ab.httpPost(_globalApi + 'usr_postpone_reminder', {
+                                'r_id': arg.nt_rid,
+                                'r_intv': addZero(time_tbm[0]) + ':' + addZero(time_tbm[1]),
+                                'auth_token': _settings.get('auth_token'),
+
+                            })
+                            .then(r => {
+                                if (r.data.db_status == "true") {
+
+                                } else {
+                                    let myNotificationErreU = new window.Notification('Error Occured', {
+                                        body: 'Could Not Submit Data to Server'
+                                    });
+
+                                }
+                            })
+                            .catch(error => {
+                                $scope.$apply(function () {
+                                    $scope.masterc.switchHard('login');
+                                });
+
+                            });
+
+
+                    }
+                });
+            }
+
+        });
+
+
+
+
+
+    });
 });
 
 function addZero(i) {
