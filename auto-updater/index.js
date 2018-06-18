@@ -19,10 +19,7 @@ if (os.platform() === 'darwin') {
 }
 
 function init(mainWindow) {
-  mainWindow.webContents.send('console', `App version: ${appVersion}`)
-  mainWindow.webContents.send('message', {
-    msg: `🖥 App version: ${appVersion}`
-  })
+ 
 
   if (initialized || !updateFeed || process.env.NODE_ENV === 'development') {
     return

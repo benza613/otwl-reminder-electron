@@ -21,7 +21,7 @@ var _db = new _sqlite3.Database(_os.homedir() + '/dbotwl.db');
 const _globalApiProd = "http://otwlfrt3.azurewebsites.net/api/otwlreminder/";
 const _globalApiDev = "http://localhost:56259/api/otwlreminder/";
 
-const _globalApi = _globalApiProd;  
+const _globalApi = _globalApiProd;
 
 app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $mdSidenav, $interval) {
     $rootScope.pending = 'Feature Pending. Currently Under Development.';
@@ -36,16 +36,19 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
     };
 
-    //will fetch reminders every 10 mins ie. 10min*60sec*1000ms
-    $interval(() => {
-        $scope.masterc.sync.DbReminders();
-    }, 600000);
+    console.log(_os.arch());
+
 
     if (_settings.get('timer_init_otwl') == 1) {
         _settings.set('timer_init_otwl', 2);
+        //will fetch reminders every 10 mins ie. 10min*60sec*1000ms
+        $interval(() => {
+            $scope.masterc.sync.DbReminders();
+        }, 600000);
+
         $interval(() => {
             $scope.masterc.sync.LocalReminderTimer();
-        }, 30000);
+        }, 180000);
     }
 
     if (_settings.has('auth_token')) {
@@ -60,11 +63,11 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
 
     $scope.close = function () {
-       // $mdSidenav('left').close();
+        // $mdSidenav('left').close();
     };
 
     $scope.masterc.toggleSideNav = function () {
-      //  $mdSidenav("left").toggle();
+        //  $mdSidenav("left").toggle();
     };
 
     $scope.masterc.minimizeWindow = function () {
@@ -78,40 +81,42 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
     $scope.masterc.sync = {
         DbReminders: () => {
             if (_settings.has('auth_token')) {
+                ipcRenderer.send('refresh-reminder-resync-data-1', {});
+
                 //do autologin
-                ab.httpPost(_globalApi + 'usr_get_reminders', {
-                        'auth_token': _settings.get('auth_token'),
-                    })
-                    .then(r => {
+                // ab.httpPost(_globalApi + 'usr_get_reminders', {
+                //         'auth_token': _settings.get('auth_token'),
+                //     })
+                //     .then(r => {
 
-                        if (r != null && r.data != null) {
-                            //auto login valid
-                            if (r.data.db_status == "true") {
+                //         if (r != null && r.data != null) {
+                //             //auto login valid
+                //             if (r.data.db_status == "true") {
 
 
-                                $scope.$apply(function () {
-                                    $rootScope.mainapp.showWait = false;
-                                    $scope.reminder.gridOptions.data = r.data.db_data;
-                                });
+                //                 $scope.$apply(function () {
+                //                     $rootScope.mainapp.showWait = false;
+                //                     $scope.reminder.gridOptions.data = r.data.db_data;
+                //                 });
 
-                            } else {
-                                let myNotificationErr = new window.Notification('Error Occured', {
-                                    body: 'Could Not sync Data'
-                                });
+                //             } else {
+                //                 let myNotificationErr = new window.Notification('Error Occured', {
+                //                     body: 'Could Not sync Data'
+                //                 });
 
-                                myNotificationErr.onclick = () => {
-                                    console.log('Notification clicked');
-                                };
-                            }
-                        }
+                //                 myNotificationErr.onclick = () => {
+                //                     console.log('Notification clicked');
+                //                 };
+                //             }
+                //         }
 
-                    })
-                    .catch(error => {
-                        $scope.$apply(function () {
-                            $scope.masterc.switchHard('login');
-                        });
+                //     })
+                //     .catch(error => {
+                //         $scope.$apply(function () {
+                //             $scope.masterc.switchHard('login');
+                //         });
 
-                    });
+                //     });
             }
         },
         LocalReminderTimer: () => {
@@ -270,6 +275,14 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
 
 
+    });
+
+    ipcRenderer.on('reminder-main-logout', function (e, arg) {
+        $scope.$apply(function () {
+            $scope.masterc.switchHard('login');
+            _settings.set('auth_token', '');
+
+        });
     });
 });
 

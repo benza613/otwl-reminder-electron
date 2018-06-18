@@ -77,7 +77,7 @@ function createWindow() {
   setupPushReceiver(win.webContents);
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
   // Emitted when the window is minimizd.
   win.on('minimize', function (event) {
@@ -121,14 +121,11 @@ app.on('ready', () => {
       type: 'radio',
     },
     {
-      label: 'Actions',
-      submenu: [{
-          label: 'Sync'
-        },
-        {
-          label: 'Check DB'
-        }
-      ]
+      label: 'Logout',
+      click: function () {
+        win.webContents.send('reminder-main-logout', {});
+      }
+
     },
     {
       label: 'Quit',
@@ -147,8 +144,8 @@ app.on('ready', () => {
   createWindow();
   tray.on('double-click', () => {
 
-  win.show();
-//    createWindow();
+    win.show();
+    //    createWindow();
   });
 
 
@@ -189,3 +186,8 @@ ipcMain.on('snooze-specific-rem', function (e, arg) {
 ipcMain.on('refresh-reminder-table-1', function (e, arg) {
   win.webContents.send('refresh-reminder-table', arg);
 });
+
+ipcMain.on('refresh-reminder-resync-data-1', function (e, arg) {
+  win.webContents.send('refresh-reminder-resync-data', arg);
+});
+

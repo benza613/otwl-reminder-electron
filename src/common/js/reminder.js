@@ -50,7 +50,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                     'auth_token': _settings.get('auth_token'),
                 })
                 .then(r => {
-
+                    console.log(r);
                     if (r != null && r.data != null) {
                         //auto login valid
                         if (r.data.db_status == "true") {
@@ -118,8 +118,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                 fastWatch: true,
                 showGridFooter: true,
                 rowHeight: 32,
-                columnDefs: [
-                    {
+                columnDefs: [{
                         displayName: 'Priority',
                         name: 'reminderPriority',
                         field: "5",
@@ -144,7 +143,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                             return 'normalReminder';
                         },
                     },
-                    
+
                     {
                         name: 'reminderText',
                         displayName: 'Reminder',
@@ -183,7 +182,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                         field: "0",
                         width: '14%',
                     },
-                     {
+                    {
                         name: 'R',
                         cellTemplate: '<span role="button" class="grid-span-redirect glyphicon glyphicon-arrow-right btn-xs" ng-click="grid.appScope.showdynamicDiv(row)"></span>',
                         width: '6%',
@@ -409,6 +408,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
     }
 
     $scope.reminder.readLocalData = () => {
+        console.log('readLocalData')
         $scope.reminder.remData = [];
         _db.serialize(function () {
 
@@ -446,4 +446,12 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
     ipcRenderer.on('refresh-reminder-table', function (e, arg) {
         $scope.reminder.readLocalData();
     });
+
+    ipcRenderer.on('refresh-reminder-resync-data', function (e, arg) {
+        console.log('here')
+        $scope.$apply(function () {
+            $scope.reminder.formAction.refreshReminders();
+        });
+    });
+
 });
