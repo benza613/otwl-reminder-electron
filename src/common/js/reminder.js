@@ -112,41 +112,13 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                 enableSorting: true,
                 enableFiltering: true,
                 enableCellEdit: false,
+                paginationPageSizes: [5, 10, 25],
+                paginationPageSize: 5,
                 flatEntityAccess: true,
                 fastWatch: true,
                 showGridFooter: true,
                 rowHeight: 32,
-                columnDefs: [{
-                        name: 'subDepartment',
-                        field: "0",
-                        width: '14%',
-                    },
-                    {
-                        name: 'reminderText',
-                        displayName: 'Reminder',
-                        field: "1",
-                        width: '35%',
-                    },
-                    {
-                        displayName: 'Date',
-                        name: 'reminderDate',
-                        field: "2",
-                        width: '17%',
-
-                    },
-                    {
-                        displayName: 'Time',
-                        name: 'reminderTime',
-                        field: "3",
-                        width: '13%',
-
-                    },
-                    {
-                        displayName: 'Type',
-                        name: 'reminderType',
-                        field: "4",
-                        width: '10%',
-                    },
+                columnDefs: [
                     {
                         displayName: 'Priority',
                         name: 'reminderPriority',
@@ -172,13 +144,46 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                             return 'normalReminder';
                         },
                     },
+                    
+                    {
+                        name: 'reminderText',
+                        displayName: 'Reminder',
+                        field: "1",
+                        width: '45%',
+                    },
                     {
                         name: 'E',
                         cellTemplate: '<span role="button" class="grid-span-edit glyphicon glyphicon-pencil btn-xs" ng-click="grid.appScope.reminder.formAction.editReminder(row, rowRenderIndex)"></span>',
                         width: '6%',
                         enableFiltering: false,
 
-                    }, {
+                    },
+                    {
+                        displayName: 'Date',
+                        name: 'reminderDate',
+                        field: "2",
+                        width: '17%',
+
+                    },
+                    {
+                        displayName: 'Time',
+                        name: 'reminderTime',
+                        field: "3",
+                        width: '10%',
+
+                    },
+                    {
+                        displayName: 'Type',
+                        name: 'reminderType',
+                        field: "4",
+                        width: '13%',
+                    },
+                    {
+                        name: 'subDepartment',
+                        field: "0",
+                        width: '14%',
+                    },
+                     {
                         name: 'R',
                         cellTemplate: '<span role="button" class="grid-span-redirect glyphicon glyphicon-arrow-right btn-xs" ng-click="grid.appScope.showdynamicDiv(row)"></span>',
                         width: '6%',
@@ -424,8 +429,8 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
 
                 $scope.$apply(function () {
                     $rootScope.mainapp.showWait = false;
-
                     $scope.reminder.gridOptions.data = $scope.reminder.remData;
+
                 });
 
             });

@@ -1,4 +1,4 @@
-var app = angular.module('otwlApp', ['ngAnimate', 'ui.grid', 'ui.grid.edit', 'ui.grid.selection', 'ui.bootstrap', 'ngMaterial', 'ngMessages', 'ngAria', 'material.svgAssetsCache']);
+var app = angular.module('otwlApp', ['ngAnimate', 'ui.grid', 'ui.grid.edit', 'ui.grid.selection','ui.grid.pagination', 'ui.bootstrap', 'ngMaterial', 'ngMessages', 'ngAria', 'material.svgAssetsCache']);
 
 // to Disable Caching
 app.config(['$httpProvider', '$compileProvider', '$mdThemingProvider', function ($httpProvider, $compileProvider, $mdThemingProvider) {

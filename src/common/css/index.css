@@ -15,8 +15,7 @@ body #mainMasterBody #mainBody {
   flex: 1;
 }
 
-body #mainMasterBody #mainBody .reminderClass{
-  
+body #mainMasterBody #mainBody .reminderClass {
   height: 100%;
   font-size: 12px;
 }
@@ -45,6 +44,24 @@ body #mainMasterBody #mainBody .reminderClass{
   font-family: 'Segoe UI';
 }
 
-.grid-span-edit{
+.grid-span-edit {
   color: #006699;
+}
+
+.panel-sk-3 {
+  max-height: 500px !important;
+  width: 100%;
+}
+
+.panel-sk-3 div.panel-body {
+  width: 100%;
+  max-height: 450px !important;
+  
+}
+
+.panel-sk-3 div.panel-body div.grid {
+  width:855px; 
+  height:300px;
+  max-height: 300px !important;
+  
 }

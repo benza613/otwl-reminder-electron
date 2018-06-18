@@ -18,10 +18,10 @@ const _settings = require('electron-settings');
 var _sqlite3 = require('sqlite3').verbose();
 var _db = new _sqlite3.Database(_os.homedir() + '/dbotwl.db');
 
-const _globalApiProd = "http://otwlfrt4.azurewebsites.net/api/otwlreminder/";
+const _globalApiProd = "http://otwlfrt3.azurewebsites.net/api/otwlreminder/";
 const _globalApiDev = "http://localhost:56259/api/otwlreminder/";
 
-const _globalApi = _globalApiDev;
+const _globalApi = _globalApiProd;  
 
 app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $mdSidenav, $interval) {
     $rootScope.pending = 'Feature Pending. Currently Under Development.';
@@ -60,11 +60,11 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
 
     $scope.close = function () {
-        $mdSidenav('left').close();
+       // $mdSidenav('left').close();
     };
 
     $scope.masterc.toggleSideNav = function () {
-        $mdSidenav("left").toggle();
+      //  $mdSidenav("left").toggle();
     };
 
     $scope.masterc.minimizeWindow = function () {
