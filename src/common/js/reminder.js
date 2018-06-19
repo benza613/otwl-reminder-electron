@@ -290,12 +290,12 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
             $scope.reminder.row = {};
 
             $scope.reminder.row.entity = {
-                remText: rowx.entity[1],
-                remDate: rowx.entity[2],
-                remTime: rowx.entity[3],
-                remType: rowx.entity[4],
-                remID: rowx.entity[6],
-                remPriority: rowx.entity[5],
+                remText: angular.copy(rowx.entity[1]),
+                remDate: angular.copy(rowx.entity[2]),
+                remTime: angular.copy(rowx.entity[3]),
+                remType: angular.copy(rowx.entity[4]),
+                remID: angular.copy(rowx.entity[6]),
+                remPriority: angular.copy(rowx.entity[5]),
             };
 
             var modalInstanceI = $uibModal.open({

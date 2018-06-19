@@ -27,7 +27,7 @@ if (require('electron-squirrel-startup')) {
 app.setAppUserModelId('com.electron.benappid');
 
 app.setLoginItemSettings({
-  openAtLogin: false,
+  openAtLogin: true,
 });
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -77,7 +77,7 @@ function createWindow() {
   setupPushReceiver(win.webContents);
 
   // Open the DevTools.
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   // Emitted when the window is minimizd.
   win.on('minimize', function (event) {
@@ -99,7 +99,7 @@ function createWindow() {
   });
 
   win.webContents.on('did-finish-load', () => {
-    // autoUpdater.init(win)
+     //autoUpdater.init(win)
 
   })
 

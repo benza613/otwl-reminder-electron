@@ -13,9 +13,24 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
 
         $rootScope.mainapp.showWait = true;
         let macid = "";
-        if (_os.networkInterfaces().Ethernet.filter((x) => x.family == "IPv4").length > 0) {
-            macid = _os.networkInterfaces().Ethernet.filter((x) => x.family == "IPv4")[0].mac;
+
+        var networkdevcs = _os.networkInterfaces();
+
+        for (var nw in networkdevcs) {
+            if (networkdevcs[nw].filter((x) => x.family == "IPv4").length > 0) {
+
+                for (let idx_nws = 0; idx_nws < networkdevcs[nw].length; idx_nws++) {
+                    if (networkdevcs[nw][idx_nws].mac != undefined) {
+
+                        macid = networkdevcs[nw][idx_nws].mac;
+
+                    }
+                }
+
+                break;
+            }
         }
+
 
         let hostname = _os.hostname();
 
@@ -32,13 +47,13 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
                 if (r != null && r.data != null) {
                     $scope.$apply(function () {
                         $rootScope.mainapp.showWait = false;
-                    }); 
+                    });
                     if (r.data.db_status == "true") {
                         _settings.set('auth_token', r.data.auth_token);
-                    
+
                         $scope.$apply(function () {
                             $scope.masterc.switchHard('reminder');
-                        }); 
+                        });
                     }
                 }
 
@@ -47,7 +62,7 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
                 alert('Error Occured');
                 $scope.$apply(function () {
                     $rootScope.mainapp.showWait = false;
-                }); 
+                });
 
             });
     };

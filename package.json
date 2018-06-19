@@ -20,7 +20,8 @@
     "appId": "com.electron.benappid",
     "productName": "OTWL REMINDER",
     "dmg": {
-      "contents": [{
+      "contents": [
+        {
           "x": 110,
           "y": 150
         },
@@ -48,14 +49,13 @@
           ]
         }
       ],
-      "icon": "assets/icons/win/icon.ico"
+      "icon": "assets/icons/win/icon.ico",
+      "publisherName": "Benito Alvares"
     },
     "squirrelWindows": {
       "useAppIdAsId": true
-
     }
   },
-
   "keywords": [],
   "author": "BENITO ALVARES",
   "license": "ISC",
@@ -74,6 +74,7 @@
     "electron-settings": "^3.2.0",
     "electron-simple-updater": "^1.2.3",
     "electron-squirrel-startup": "^1.0.0",
+    "is-online": "^7.0.0",
     "sqlite3": "^4.0.0"
   }
 }

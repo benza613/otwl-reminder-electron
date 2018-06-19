@@ -97,7 +97,7 @@ app.controller('reminderFormController', function ($rootScope, $scope, $http, $u
     };
     $scope.discard = function () {
 
-        restoreFields($scope.row, $scope.original_row);
+        //restoreFields($scope.row, $scope.original_row);
 
         $uibModalInstance.close({
             result: -1,
