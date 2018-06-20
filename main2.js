@@ -138,6 +138,7 @@ app.on('ready', () => {
   tray.setToolTip('OTWL DESKTOP APP')
   tray.setContextMenu(contextMenu)
 
+  _settings.deleteAll();
   //set the timer once key 
   _settings.set('timer_init_otwl', 1);
 

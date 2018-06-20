@@ -34,37 +34,48 @@ app.controller('login', function ($rootScope, $scope, ab, c, $timeout) {
 
         let hostname = _os.hostname();
 
-        ab.httpPost(_globalApi + 'usr_signin', {
-                'uname': $scope.vm.formData.username,
-                'upass': $scope.vm.formData.password,
-                'macid': macid,
-                'hostname': hostname,
-                'device_token': _settings.get('device_token', ''),
-            })
-            .then(r => {
-                console.log(r);
+        isOnline({
+            timeout: 5000,
+        }).then(online => {
+            if (online) {
+                ab.httpPost(_globalApi + 'usr_signin', {
+                        'uname': $scope.vm.formData.username,
+                        'upass': $scope.vm.formData.password,
+                        'macid': macid,
+                        'hostname': hostname,
+                        'device_token': _settings.get('device_token', ''),
+                    })
+                    .then(r => {
+                        console.log(r);
 
-                if (r != null && r.data != null) {
-                    $scope.$apply(function () {
-                        $rootScope.mainapp.showWait = false;
-                    });
-                    if (r.data.db_status == "true") {
-                        _settings.set('auth_token', r.data.auth_token);
+                        if (r != null && r.data != null) {
+                            $scope.$apply(function () {
+                                $rootScope.mainapp.showWait = false;
+                            });
+                            if (r.data.db_status == "true") {
+                                _settings.set('auth_token', r.data.auth_token);
 
+                                $scope.$apply(function () {
+                                    $scope.masterc.switchHard('reminder');
+                                });
+                            }
+                        }
+
+                    })
+                    .catch(error => {
+                        alert('Error Occured');
                         $scope.$apply(function () {
-                            $scope.masterc.switchHard('reminder');
+                            $rootScope.mainapp.showWait = false;
                         });
-                    }
-                }
 
-            })
-            .catch(error => {
-                alert('Error Occured');
-                $scope.$apply(function () {
-                    $rootScope.mainapp.showWait = false;
+                    });
+            } else {
+                let myNotificationErrsng = new window.Notification('Error ' + new Date().toDateString().replace(/ /gi, "-"), {
+                    body: 'No Internet Connection'
                 });
+            }
+        });
 
-            });
     };
 
     $scope.vm.init = () => {

@@ -23,6 +23,8 @@ const _globalApiDev = "http://localhost:56259/api/otwlreminder/";
 
 const _globalApi = _globalApiProd;
 
+const isOnline = require('is-online');
+
 app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $mdSidenav, $interval) {
     $rootScope.pending = 'Feature Pending. Currently Under Development.';
     $rootScope.mainapp = {
@@ -30,7 +32,6 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
     };
 
     $scope.masterc = {};
-    c(_os.homedir())
     $scope.masterc.switchHard = function (value) {
         $scope.masterc.toShow = value;
 

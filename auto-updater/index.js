@@ -6,6 +6,8 @@ const {
 } = require('electron');
 const autoUpdater = electron.autoUpdater
 const appVersion = require('../package.json').version
+var fs = require('fs');
+
 
 let updateFeed = ''
 let initialized = false
@@ -19,7 +21,7 @@ if (os.platform() === 'darwin') {
 }
 
 function init(mainWindow) {
- 
+
 
   if (initialized || !updateFeed || process.env.NODE_ENV === 'development') {
     return
@@ -30,16 +32,15 @@ function init(mainWindow) {
   autoUpdater.setFeedURL(updateFeed)
 
   autoUpdater.on('error', (ev, err) => {
-    dialog.showErrorBox({
-      title: 'Error Occured',
-      content: 'AutoUpdater'
-    }, response => {
-     
+    fs.appendFile('autuperrorlog.txt', 'Hello content!', function (errx) {
+      if (errx) {} else {
+        console.log(err);
+      }
     });
   })
 
   autoUpdater.once('checking-for-update', (ev, err) => {
-  
+
   })
 
   autoUpdater.once('update-available', (ev, err) => {
@@ -49,7 +50,7 @@ function init(mainWindow) {
       message: 'UPDATE AVAILABLE',
       detail: 'A New Update is available. Downloading will occur in the background',
     }, response => {
-     
+
     });
 
   })
@@ -69,7 +70,7 @@ function init(mainWindow) {
       detail: 'Please Update Immediately'
     }, response => {
       if (response === 0) {
-       // setTimeout(() => autoUpdater.quitAndInstall(), 1);
+        // setTimeout(() => autoUpdater.quitAndInstall(), 1);
       }
     });
   })
