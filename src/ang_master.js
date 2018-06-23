@@ -37,7 +37,6 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
     };
 
-    console.log(_os.arch());
 
 
     if (_settings.get('timer_init_otwl') == 1) {
@@ -81,43 +80,9 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
     $scope.masterc.sync = {
         DbReminders: () => {
-            if (_settings.has('auth_token')) {
+            if (_settings.has('auth_token') && _settings.get('auth_token') != '') {
                 ipcRenderer.send('refresh-reminder-resync-data-1', {});
 
-                //do autologin
-                // ab.httpPost(_globalApi + 'usr_get_reminders', {
-                //         'auth_token': _settings.get('auth_token'),
-                //     })
-                //     .then(r => {
-
-                //         if (r != null && r.data != null) {
-                //             //auto login valid
-                //             if (r.data.db_status == "true") {
-
-
-                //                 $scope.$apply(function () {
-                //                     $rootScope.mainapp.showWait = false;
-                //                     $scope.reminder.gridOptions.data = r.data.db_data;
-                //                 });
-
-                //             } else {
-                //                 let myNotificationErr = new window.Notification('Error Occured', {
-                //                     body: 'Could Not sync Data'
-                //                 });
-
-                //                 myNotificationErr.onclick = () => {
-                //                     console.log('Notification clicked');
-                //                 };
-                //             }
-                //         }
-
-                //     })
-                //     .catch(error => {
-                //         $scope.$apply(function () {
-                //             $scope.masterc.switchHard('login');
-                //         });
-
-                //     });
             }
         },
         LocalReminderTimer: () => {
@@ -146,19 +111,9 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
                     let tTime_plus1 = addZero(hh) + ':' + addZero(mn + 1);
                     _db.all("SELECT * FROM tblreminders where r_date = ? and r_time BETWEEN ? and ? ", [today, tTime_minus1, tTime_plus1], function (err, rows) {
 
-                        if (rows.length > 0) {
+                        for (let iRows = 0; iRows < rows.length; iRows++) {
 
-                            //let myNotificationNotif = {};
-
-                            // myNotificationNotif[idn] = new window.Notification(rows[idn]['r_text'], {
-                            //     body: 'Reminder Alert'
-                            // });
-
-                            // myNotificationNotif[idn].onclick = () => {
-                            //     console.log('Notification clicked');
-                            // };
-
-                            const modalPath = path.join('file://', __dirname, 'notif.html?rtxt=' + encodeURIComponent(rows[0]['r_text']) + '&rid=' + encodeURIComponent(rows[0]['r_id']));
+                            const modalPath = path.join('file://', __dirname, 'notif.html?rtxt=' + encodeURIComponent(rows[iRows]['r_text']) + '&rid=' + encodeURIComponent(rows[iRows]['r_id']));
                             let winN = new BrowserWindow({
                                 width: 450,
                                 height: 280,
@@ -172,10 +127,8 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
                             winN.loadURL(modalPath);
                             winN.show();
-
-
-                            //alert(rows.length + '  --  ' + rows[0]['r_text']);
                         }
+
 
 
                     });

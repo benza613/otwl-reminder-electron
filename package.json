@@ -17,7 +17,7 @@
     "dev-rebuild-windows-ben": "install -g windows-build-tools"
   },
   "build": {
-    "appId": "com.electron.benappid",
+    "appId": "com.benremid.reminder",
     "productName": "OTWL REMINDER",
     "dmg": {
       "contents": [

@@ -44,64 +44,83 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
 
     $scope.reminder.get = {
         reminders: () => {
-            $rootScope.mainapp.showWait = true;
 
-            ab.httpPost(_globalApi + 'usr_get_reminders', {
-                    'auth_token': _settings.get('auth_token'),
-                })
-                .then(r => {
-                    console.log(r);
-                    if (r != null && r.data != null) {
-                        //auto login valid
-                        if (r.data.db_status == "true") {
+            isOnline({
+                timeout: 5000,
+            }).then(online => {
+                if (online) {
+                    $rootScope.mainapp.showWait = true;
 
-                            _db.serialize(function () {
-                                _db.run("DROP TABLE if exists tblreminders ");
-                                _db.run(`CREATE TABLE if not exists
-                                 tblreminders (r_id INTEGER, r_sd TEXT, r_text TEXT, r_date TEXT,
-                                r_time TEXT, r_type TEXT, r_priority INTEGER, r_refid TEXT )`);
-                                let stmt = _db.prepare("INSERT INTO tblreminders VALUES (?,?,?,?,?,?,?,?)");
+                    _db.serialize(function () {
 
-                                for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
+                        _db.run(`CREATE TABLE if not exists
+                        tblreminders (r_id INTEGER, r_sd TEXT, r_text TEXT, r_date TEXT,
+                       r_time TEXT, r_type TEXT, r_priority INTEGER, r_refid TEXT, r_synced INTEGER )`);
+                        _db.all("SELECT * FROM tblreminders where r_synced = ? or r_synced = ? ", ["0", "-1"], function (err, rows_send_server) {
+                            
 
-                                    stmt.run(
-                                        r.data.db_data[rowIndex][6],
-                                        r.data.db_data[rowIndex][0],
-                                        r.data.db_data[rowIndex][1],
-                                        r.data.db_data[rowIndex][2],
-                                        r.data.db_data[rowIndex][3],
-                                        r.data.db_data[rowIndex][4],
-                                        r.data.db_data[rowIndex][5],
-                                        r.data.db_data[rowIndex][7]
-                                    )
+                            ab.httpPost(_globalApi + 'usr_get_reminders', {
+                                    'auth_token': _settings.get('auth_token'),
+                                })
+                                .then(r => {
+                                    console.log(r);
+                                    if (r != null && r.data != null) {
+                                        //auto login valid
+                                        if (r.data.db_status == "true") {
 
-                                }
-                                stmt.finalize();
+                                            _db.serialize(function () {
+                                                _db.run("DELETE FROM tblreminders WHERE r_synced = 0");
 
-                                $scope.reminder.readLocalData();
+                                                let stmt = _db.prepare("INSERT INTO tblreminders VALUES (?,?,?,?,?,?,?,?,?)");
 
-                            });
-                            //_db.close();
+                                                for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
+
+                                                    stmt.run(
+                                                        r.data.db_data[rowIndex][6],
+                                                        r.data.db_data[rowIndex][0],
+                                                        r.data.db_data[rowIndex][1],
+                                                        r.data.db_data[rowIndex][2],
+                                                        r.data.db_data[rowIndex][3],
+                                                        r.data.db_data[rowIndex][4],
+                                                        r.data.db_data[rowIndex][5],
+                                                        r.data.db_data[rowIndex][7],
+                                                        "0"
+                                                    )
+
+                                                }
+                                                stmt.finalize();
+
+                                                $scope.reminder.readLocalData();
+
+                                            });
+                                            //_db.close();
 
 
-                        } else {
-                            let myNotificationErr = new window.Notification('Error Occured', {
-                                body: 'Could Not sync Data'
-                            });
+                                        } else {
+                                            let myNotificationErr = new window.Notification('Error Occured', {
+                                                body: 'Could Not sync Data'
+                                            });
 
-                            myNotificationErr.onclick = () => {
-                                console.log('Notification clicked');
-                            };
-                        }
-                    }
+                                            myNotificationErr.onclick = () => {
+                                                console.log('Notification clicked');
+                                            };
+                                        }
+                                    }
 
-                })
-                .catch(error => {
-                    $scope.$apply(function () {
-                        $scope.masterc.switchHard('login');
+                                })
+                                .catch(error => {
+                                    $scope.$apply(function () {
+                                        $scope.masterc.switchHard('login');
+                                    });
+
+                                });
+
+
+
+                        });
                     });
-
-                });
+                }
+            });
         }
     }
 
@@ -229,56 +248,71 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
 
             modalInstanceI.result.then(function (data) {
                 if (data.result === 1) {
-                    ab.httpPost(_globalApi + 'usr_ins_reminder', data.formdata)
-                        .then(r => {
-                            if (r != null && r.data != null) {
-                                //auto login valid
-                                if (r.data.db_status == "true") {
 
-                                    _db.serialize(function () {
-                                        let stmt = _db.prepare("INSERT INTO tblreminders VALUES (?,?,?,?,?,?,?,?)");
-
-                                        for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
-
-                                            stmt.run(
-                                                r.data.db_data[rowIndex][6],
-                                                r.data.db_data[rowIndex][0],
-                                                r.data.db_data[rowIndex][1],
-                                                r.data.db_data[rowIndex][2],
-                                                r.data.db_data[rowIndex][3],
-                                                r.data.db_data[rowIndex][4],
-                                                r.data.db_data[rowIndex][5],
-                                                r.data.db_data[rowIndex][7]
-                                            )
-
-                                        }
-                                        stmt.finalize();
-
-                                        $scope.reminder.readLocalData();
-
-                                    });
-                                    //_db.close();
-
-
-                                } else {
-                                    let myNotificationErr = new window.Notification('Error Occured', {
-                                        body: 'Could Not sync Data'
-                                    });
-
-                                    myNotificationErr.onclick = () => {
-                                        console.log('Notification clicked');
-                                    };
+                    isOnline({
+                        timeout: 5000,
+                    }).then(online => {
+                        if (online) {
+                            ab.httpPost(_globalApi + 'usr_ins_reminder', data.formdata)
+                            .then(r => {
+                                if (r != null && r.data != null) {
+                                    //auto login valid
+                                    if (r.data.db_status == "true") {
+    
+                                        _db.serialize(function () {
+                                            let stmt = _db.prepare("INSERT INTO tblreminders VALUES (?,?,?,?,?,?,?,?)");
+    
+                                            for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
+    
+                                                stmt.run(
+                                                    r.data.db_data[rowIndex][6],
+                                                    r.data.db_data[rowIndex][0],
+                                                    r.data.db_data[rowIndex][1],
+                                                    r.data.db_data[rowIndex][2],
+                                                    r.data.db_data[rowIndex][3],
+                                                    r.data.db_data[rowIndex][4],
+                                                    r.data.db_data[rowIndex][5],
+                                                    r.data.db_data[rowIndex][7]
+                                                )
+    
+                                            }
+                                            stmt.finalize();
+    
+                                            $scope.reminder.readLocalData();
+    
+                                        });
+                                        //_db.close();
+    
+    
+                                    } else {
+                                        let myNotificationErr = new window.Notification('Error Occured', {
+                                            body: 'Could Not sync Data'
+                                        });
+    
+                                        myNotificationErr.onclick = () => {
+                                            console.log('Notification clicked');
+                                        };
+                                    }
                                 }
-                            }
-
-                        })
-                        .catch(error => {
-                            $scope.$apply(function () {
-                                $scope.masterc.switchHard('login');
+    
+                            })
+                            .catch(error => {
+                                $scope.$apply(function () {
+                                    $scope.masterc.switchHard('login');
+                                });
+    
                             });
+                   
+                        }else{
+                            let myNotificationErreU = new window.Notification('No internet', {
+                                body: 'Could Not Submit Data to Server'
+                            });
+                        }
+                    });
 
-                        });
-                }
+
+
+                    }
             }).catch(function () {
                 //restore since "esc" was clicked
 
@@ -413,26 +447,28 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
         _db.serialize(function () {
 
             _db.all("SELECT * FROM tblreminders", function (err, rows) {
+                _db.all("SELECT * FROM tblreminders", function (err, rows) {
 
-                for (let i = 0; i < rows.length; i++) {
-                    $scope.reminder.remData.push([
-                        rows[i]["r_sd"],
-                        rows[i]["r_text"],
-                        rows[i]["r_date"],
-                        rows[i]["r_time"],
-                        rows[i]["r_type"],
-                        rows[i]["r_priority"],
-                        rows[i]["r_id"],
-                        rows[i]["r_refid"]
-                    ]);
-                }
+                    for (let i = 0; i < rows.length; i++) {
+                        $scope.reminder.remData.push([
+                            rows[i]["r_sd"],
+                            rows[i]["r_text"],
+                            rows[i]["r_date"],
+                            rows[i]["r_time"],
+                            rows[i]["r_type"],
+                            rows[i]["r_priority"],
+                            rows[i]["r_id"],
+                            rows[i]["r_refid"]
+                        ]);
+                    }
 
-                $scope.$apply(function () {
-                    $rootScope.mainapp.showWait = false;
-                    $scope.reminder.gridOptions.data = $scope.reminder.remData;
+                    $scope.$apply(function () {
+                        $rootScope.mainapp.showWait = false;
+                        $scope.reminder.gridOptions.data = $scope.reminder.remData;
+
+                    });
 
                 });
-
             });
 
 
@@ -444,11 +480,14 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
     $scope.reminder.init();
 
     ipcRenderer.on('refresh-reminder-table', function (e, arg) {
+        $rootScope.mainapp.showWait = true;
+
         $scope.reminder.readLocalData();
     });
 
     ipcRenderer.on('refresh-reminder-resync-data', function (e, arg) {
-        console.log('here')
+
+
         $scope.$apply(function () {
             $scope.reminder.formAction.refreshReminders();
         });
