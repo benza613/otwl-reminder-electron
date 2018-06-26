@@ -9,7 +9,7 @@ const path = require('path');
 const url = require('url');
 
 const isDev = require('electron-is-dev'); // this is required to check if the app is running in development mode. 
-const autoUpdater = require('./auto-updater')
+//const autoUpdater = require('./auto-updater')
 
 const shell = require('electron').shell;
 var _settings = require('electron-settings');
@@ -77,7 +77,7 @@ function createWindow() {
   setupPushReceiver(win.webContents);
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+ //win.webContents.openDevTools();
 
   // Emitted when the window is minimizd.
   win.on('minimize', function (event) {
@@ -191,4 +191,5 @@ ipcMain.on('refresh-reminder-table-1', function (e, arg) {
 ipcMain.on('refresh-reminder-resync-data-1', function (e, arg) {
   win.webContents.send('refresh-reminder-resync-data', arg);
 });
+
 

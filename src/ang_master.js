@@ -21,7 +21,7 @@ var _db = new _sqlite3.Database(_os.homedir() + '/dbotwl.db');
 const _globalApiProd = "http://otwlfrt3.azurewebsites.net/api/otwlreminder/";
 const _globalApiDev = "http://localhost:56259/api/otwlreminder/";
 
-const _globalApi = _globalApiProd;
+const _globalApi = _globalApiDev;
 
 const isOnline = require('is-online');
 
@@ -195,30 +195,39 @@ app.controller('MasterController', function ($rootScope, $scope, $http, ab, c, $
 
 
 
-                        ab.httpPost(_globalApi + 'usr_postpone_reminder', {
-                                'r_id': arg.nt_rid,
-                                'r_intv': addZero(time_tbm[0]) + ':' + addZero(time_tbm[1]),
-                                'auth_token': _settings.get('auth_token'),
+                        isOnline({
+                            timeout: 5000,
+                        }).then(online => {
 
-                            })
-                            .then(r => {
-                                if (r.data.db_status == "true") {
+                            if (online) {
+                                ab.httpPost(_globalApi + 'usr_postpone_reminder', {
+                                        'r_id': arg.nt_rid,
+                                        'r_intv': addZero(time_tbm[0]) + ':' + addZero(time_tbm[1]),
+                                        'auth_token': _settings.get('auth_token'),
 
-                                } else {
-                                    let myNotificationErreU = new window.Notification('Error Occured', {
-                                        body: 'Could Not Submit Data to Server'
+                                    })
+                                    .then(r => {
+                                        if (r.data.db_status == "true") {
+
+                                        } else {
+                                            let myNotificationErreU = new window.Notification('Error Occured', {
+                                                body: 'Could Not Submit Data to Server'
+                                            });
+
+                                        }
+                                    })
+                                    .catch(error => {
+                                        $scope.$apply(function () {
+                                            $scope.masterc.switchHard('login');
+                                        });
+
                                     });
 
-                                }
-                            })
-                            .catch(error => {
-                                $scope.$apply(function () {
-                                    $scope.masterc.switchHard('login');
-                                });
 
-                            });
-
-
+                            }else{
+                                alert('No Connection to Update Server');
+                            }
+                        });
                     }
                 });
             }

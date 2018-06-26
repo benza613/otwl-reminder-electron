@@ -57,7 +57,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                         tblreminders (r_id INTEGER, r_sd TEXT, r_text TEXT, r_date TEXT,
                        r_time TEXT, r_type TEXT, r_priority INTEGER, r_refid TEXT, r_synced INTEGER )`);
                         _db.all("SELECT * FROM tblreminders where r_synced = ? or r_synced = ? ", ["0", "-1"], function (err, rows_send_server) {
-                            
+
 
                             ab.httpPost(_globalApi + 'usr_get_reminders', {
                                     'auth_token': _settings.get('auth_token'),
@@ -66,6 +66,7 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                                     console.log(r);
                                     if (r != null && r.data != null) {
                                         //auto login valid
+                                        
                                         if (r.data.db_status == "true") {
 
                                             _db.serialize(function () {
@@ -254,65 +255,61 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
                     }).then(online => {
                         if (online) {
                             ab.httpPost(_globalApi + 'usr_ins_reminder', data.formdata)
-                            .then(r => {
-                                if (r != null && r.data != null) {
-                                    //auto login valid
-                                    if (r.data.db_status == "true") {
-    
-                                        _db.serialize(function () {
-                                            let stmt = _db.prepare("INSERT INTO tblreminders VALUES (?,?,?,?,?,?,?,?)");
-    
-                                            for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
-    
-                                                stmt.run(
-                                                    r.data.db_data[rowIndex][6],
-                                                    r.data.db_data[rowIndex][0],
-                                                    r.data.db_data[rowIndex][1],
-                                                    r.data.db_data[rowIndex][2],
-                                                    r.data.db_data[rowIndex][3],
-                                                    r.data.db_data[rowIndex][4],
-                                                    r.data.db_data[rowIndex][5],
-                                                    r.data.db_data[rowIndex][7]
-                                                )
-    
-                                            }
-                                            stmt.finalize();
-    
-                                            $scope.reminder.readLocalData();
-    
-                                        });
-                                        //_db.close();
-    
-    
-                                    } else {
-                                        let myNotificationErr = new window.Notification('Error Occured', {
-                                            body: 'Could Not sync Data'
-                                        });
-    
-                                        myNotificationErr.onclick = () => {
-                                            console.log('Notification clicked');
-                                        };
+                                .then(r => {
+                                    if (r != null && r.data != null) {
+                                        //auto login valid
+                                        if (r.data.db_status == "true") {
+
+                                            _db.serialize(function () {
+                                                let stmt = _db.prepare("INSERT INTO tblreminders VALUES (?,?,?,?,?,?,?,?)");
+
+                                                for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
+
+                                                    stmt.run(
+                                                        r.data.db_data[rowIndex][6],
+                                                        r.data.db_data[rowIndex][0],
+                                                        r.data.db_data[rowIndex][1],
+                                                        r.data.db_data[rowIndex][2],
+                                                        r.data.db_data[rowIndex][3],
+                                                        r.data.db_data[rowIndex][4],
+                                                        r.data.db_data[rowIndex][5],
+                                                        r.data.db_data[rowIndex][7]
+                                                    )
+
+                                                }
+                                                stmt.finalize();
+
+                                                $scope.reminder.readLocalData();
+
+                                            });
+                                            //_db.close();
+
+
+                                        } else {
+                                            let myNotificationErr = new window.Notification('Error Occured', {
+                                                body: 'Could Not sync Data'
+                                            });
+
+                                        }
                                     }
-                                }
-    
-                            })
-                            .catch(error => {
-                                $scope.$apply(function () {
-                                    $scope.masterc.switchHard('login');
+
+                                })
+                                .catch(error => {
+                                    $scope.$apply(function () {
+                                        $scope.masterc.switchHard('login');
+                                    });
+
                                 });
-    
-                            });
-                   
-                        }else{
-                            let myNotificationErreU = new window.Notification('No internet', {
-                                body: 'Could Not Submit Data to Server'
-                            });
+
+                        } else {
+                            alert('No Internet Connection');
+
                         }
                     });
 
 
 
-                    }
+                }
             }).catch(function () {
                 //restore since "esc" was clicked
 
@@ -349,87 +346,109 @@ app.controller('reminder', function ($rootScope, $scope, ab, c, $timeout, $uibMo
 
             modalInstanceI.result.then(function (data) {
                 if (data.result === 1) {
-                    $rootScope.mainapp.showWait = true;
 
-                    ab.httpPost(_globalApi + 'usr_ins_update', data.formdata)
-                        .then(r => {
-                            c(r);
-                            if (r.data.db_status == "true") {
+                    isOnline({
+                        timeout: 5000,
+                    }).then(online => {
+                        if (online) {
+                            $rootScope.mainapp.showWait = true;
 
-                                _db.serialize(function () {
-                                    let stmt = _db.prepare(`
+                            ab.httpPost(_globalApi + 'usr_ins_update', data.formdata)
+                                .then(r => {
+                                    c(r);
+                                    if (r.data.db_status == "true") {
+
+                                        _db.serialize(function () {
+                                            let stmt = _db.prepare(`
                                     Update tblreminders 
                                     SET r_text = ? , r_date = ? , r_time = ? , r_priority = ?
                                     WHERE r_id = ? `);
-                                    for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
+                                            for (let rowIndex = 0; rowIndex < r.data.db_data.length; rowIndex++) {
 
-                                        stmt.run(
-                                            r.data.db_data[rowIndex][1],
-                                            r.data.db_data[rowIndex][2],
-                                            r.data.db_data[rowIndex][3],
-                                            r.data.db_data[rowIndex][5],
-                                            r.data.db_data[rowIndex][6],
-                                        )
+                                                stmt.run(
+                                                    r.data.db_data[rowIndex][1],
+                                                    r.data.db_data[rowIndex][2],
+                                                    r.data.db_data[rowIndex][3],
+                                                    r.data.db_data[rowIndex][5],
+                                                    r.data.db_data[rowIndex][6],
+                                                )
 
+                                            }
+                                            stmt.finalize();
+
+                                            $scope.reminder.readLocalData();
+
+                                        });
+                                        //_db.close();
+
+
+                                    } else {
+                                        let myNotificationErrU = new window.Notification('Error Occured', {
+                                            body: 'Could Not Update Data'
+                                        });
+
+                                        myNotificationErrU.onclick = () => {
+                                            console.log('Notification clicked');
+                                        };
                                     }
-                                    stmt.finalize();
-
-                                    $scope.reminder.readLocalData();
+                                })
+                                .catch(error => {
+                                    $scope.$apply(function () {
+                                        $scope.masterc.switchHard('login');
+                                    });
 
                                 });
-                                //_db.close();
 
+                        } else {
+                            alert('No Internet Connection');
 
-                            } else {
-                                let myNotificationErrU = new window.Notification('Error Occured', {
-                                    body: 'Could Not Update Data'
-                                });
+                        }
+                    });
 
-                                myNotificationErrU.onclick = () => {
-                                    console.log('Notification clicked');
-                                };
-                            }
-                        })
-                        .catch(error => {
-                            $scope.$apply(function () {
-                                $scope.masterc.switchHard('login');
-                            });
-
-                        });
                 } else if (data.result === 2) {
                     //restore since "esc" was clicked
-                    $rootScope.mainapp.showWait = true;
 
-                    ab.httpPost(_globalApi + 'usr_ins_delete', data.formdata)
-                        .then(r => {
-                            c(r);
-                            if (r.data.db_status == "true") {
+                    isOnline({
+                        timeout: 5000,
+                    }).then(online => {
 
-                                _db.serialize(function () {
-                                    let stmt = _db.prepare(`
-                 DELETE FROM tblreminders 
-                 WHERE r_id = ? `);
-                                    stmt.run(r.data.db_data);
+                        if (online) {
+                            $rootScope.mainapp.showWait = true;
 
-                                    stmt.finalize();
+                            ab.httpPost(_globalApi + 'usr_ins_delete', data.formdata)
+                                .then(r => {
+                                    c(r);
+                                    if (r.data.db_status == "true") {
 
-                                    $scope.reminder.readLocalData();
+                                        _db.serialize(function () {
+                                            let stmt = _db.prepare(`DELETE FROM tblreminders WHERE r_id = ? `);
+                                            stmt.run(r.data.db_data);
+
+                                            stmt.finalize();
+
+                                            $scope.reminder.readLocalData();
+
+                                        });
+
+                                    } else {
+                                        let myNotificationErrU = new window.Notification('Error Occured', {
+                                            body: 'Could Not Delete Data'
+                                        });
+
+                                    }
+                                })
+                                .catch(error => {
+                                    $scope.$apply(function () {
+                                        $scope.masterc.switchHard('login');
+                                    });
 
                                 });
 
-                            } else {
-                                let myNotificationErrU = new window.Notification('Error Occured', {
-                                    body: 'Could Not Delete Data'
-                                });
+                        } else {
+                            alert('No Internet Connection');
 
-                            }
-                        })
-                        .catch(error => {
-                            $scope.$apply(function () {
-                                $scope.masterc.switchHard('login');
-                            });
-
-                        });
+                        }
+                    });
                 }
             }).catch(function () {
 

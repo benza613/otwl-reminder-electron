@@ -65,3 +65,4 @@ console.log('starting service and registering a client');
 ipcRenderer.send(START_NOTIFICATION_SERVICE, senderId);
 
 
+
